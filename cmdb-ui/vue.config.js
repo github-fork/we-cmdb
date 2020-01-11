@@ -49,13 +49,13 @@ module.exports = {
       config
         .entry('app')
         .clear()
-        .add('./src/main-plugin.js') //作为插件时
+        .add('./src/main-plugin.js') // 作为插件时
     })
     config.when(!process.env.PLUGIN, config => {
       config
         .entry('app')
         .clear()
-        .add('./src/main.js') //独立运行时
+        .add('./src/main.js') // 独立运行时
     })
   },
   productionSourceMap: process.env.PLUGIN !== 'plugin',
@@ -69,9 +69,9 @@ module.exports = {
         plugins: [
           new CompressionPlugin({
             algorithm: 'gzip',
-            test: /\.js$|\.html$|.\css/, //匹配文件名
-            threshold: 10240, //对超过10k的数据压缩
-            deleteOriginalAssets: false //不删除源文件
+            test: /\.js$|\.html$|.\css/, // 匹配文件名
+            threshold: 10240, // 对超过10k的数据压缩
+            deleteOriginalAssets: false // 不删除源文件
           })
         ]
       }
