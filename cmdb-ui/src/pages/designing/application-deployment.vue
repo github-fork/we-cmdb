@@ -2,51 +2,26 @@
   <div>
     <Row class="artifact-management">
       <Col span="6">
-        <span style="margin-right: 10px">{{ $t("system_design") }}</span>
-        <Select
-          filterable
-          @on-change="onSystemDesignSelect"
-          v-model="systemDesignVersion"
-          label-in-name
-          style="width: 70%;"
-        >
-          <Option
-            v-for="item in systemDesigns"
-            :value="item.guid"
-            :key="item.guid"
-            >{{ item.name }}</Option
-          >
+        <span style="margin-right: 10px">{{ $t('system_design') }}</span>
+        <Select filterable @on-change="onSystemDesignSelect" v-model="systemDesignVersion" label-in-name style="width: 70%;">
+          <Option v-for="item in systemDesigns" :value="item.guid" :key="item.guid">{{ item.name }}</Option>
         </Select>
       </Col>
       <Col span="6" offset="1">
-        <span style="margin-right: 10px">{{ $t("environmental_type") }}</span>
-        <Select
-          @on-change="onEnvSelect"
-          v-model="env"
-          label-in-name
-          style="width: 70%;"
-        >
+        <span style="margin-right: 10px">{{ $t('environmental_type') }}</span>
+        <Select @on-change="onEnvSelect" v-model="env" label-in-name style="width: 70%;">
           <Option v-for="env in envs" :value="env.code || ''" :key="env.code">
             {{ env.value }}
           </Option>
         </Select>
       </Col>
       <Col span="3" offset="1">
-        <Button type="info" @click="querySysTree">{{ $t("query") }}</Button>
+        <Button type="info" @click="querySysTree">{{ $t('query') }}</Button>
       </Col>
     </Row>
     <hr style="margin: 10px 0" />
-    <Tabs
-      type="card"
-      :value="currentTab"
-      :closable="false"
-      @on-click="handleTabClick"
-    >
-      <TabPane
-        :label="$t('application_logic_diagram')"
-        name="logic-graph"
-        :index="1"
-      >
+    <Tabs type="card" :value="currentTab" :closable="false" @on-click="handleTabClick">
+      <TabPane :label="$t('application_logic_diagram')" name="logic-graph" :index="1">
         <Alert show-icon closable v-if="isDataChanged">
           Data has beed changed, click Reload button to reload graph.
           <Button slot="desc" @click="reloadHandler">Reload</Button>
@@ -55,18 +30,14 @@
         <div class="graph-container" id="graph">
           <Spin size="large" fix v-if="spinShow">
             <Icon type="ios-loading" size="44" class="spin-icon-load"></Icon>
-            <div>{{ $t("loading") }}</div>
+            <div>{{ $t('loading') }}</div>
           </Spin>
           <div v-else-if="!systemData.length" class="no-data">
-            {{ $t("no_data") }}
+            {{ $t('no_data') }}
           </div>
         </div>
       </TabPane>
-      <TabPane
-        :label="$t('application_logic_tree_diagram')"
-        name="logic-tree-graph"
-        :index="2"
-      >
+      <TabPane :label="$t('application_logic_tree_diagram')" name="logic-tree-graph" :index="2">
         <Alert show-icon closable v-if="isDataChanged">
           Data has beed changed, click Reload button to reload graph.
           <Button slot="desc" @click="reloadHandler">Reload</Button>
@@ -75,131 +46,60 @@
         <div class="graph-container" id="graphTree">
           <Spin size="large" fix v-if="treeSpinShow">
             <Icon type="ios-loading" size="44" class="spin-icon-load"></Icon>
-            <div>{{ $t("loading") }}</div>
+            <div>{{ $t('loading') }}</div>
           </Spin>
         </div>
       </TabPane>
-      <TabPane
-        :label="$t('physical_deployment_diagram')"
-        name="physicalGraph"
-        :index="3"
-      >
+      <TabPane :label="$t('physical_deployment_diagram')" name="physicalGraph" :index="3">
         <div id="physicalGraph">
-          <PhysicalGraph
-            v-if="physicalGraphData.length"
-            :graphData="physicalGraphData"
-            :links="physicalGraphLinks"
-            :callback="graphCallback"
-          ></PhysicalGraph>
-          <div v-else class="no-data">{{ $t("no_data") }}</div>
+          <PhysicalGraph v-if="physicalGraphData.length" :graphData="physicalGraphData" :links="physicalGraphLinks" :callback="graphCallback"></PhysicalGraph>
+          <div v-else class="no-data">{{ $t('no_data') }}</div>
           <Spin size="large" fix v-if="physicalSpin">
             <Icon type="ios-loading" size="44" class="spin-icon-load"></Icon>
-            <div>{{ $t("loading") }}</div>
+            <div>{{ $t('loading') }}</div>
           </Spin>
         </div>
       </TabPane>
-      <TabPane
-        v-for="(ci, index) in tabList"
-        :key="ci.id"
-        :name="ci.id"
-        :label="ci.name"
-        v-if="isShowTabs"
-        :index="index + 5"
-      >
-        <WeCMDBTable
-          :tableData="ci.tableData"
-          :tableOuterActions="ci.outerActions"
-          :tableInnerActions="ci.innerActions"
-          :tableColumns="ci.tableColumns"
-          :pagination="ci.pagination"
-          :ascOptions="ci.ascOptions"
-          :showCheckbox="needCheckout"
-          :isRefreshable="true"
-          @actionFun="actionFun"
-          @sortHandler="sortHandler"
-          @handleSubmit="handleSubmit"
-          @getSelectedRows="onSelectedRowsChange"
-          @pageChange="pageChange"
-          @pageSizeChange="pageSizeChange"
-          tableHeight="650"
-          :ref="'table' + ci.id"
-        ></WeCMDBTable>
+      <TabPane v-for="(ci, index) in tabList" :key="ci.id" :name="ci.id" :label="ci.name" v-if="isShowTabs" :index="index + 5">
+        <WeCMDBTable :tableData="ci.tableData" :tableOuterActions="ci.outerActions" :tableInnerActions="ci.innerActions" :tableColumns="ci.tableColumns" :pagination="ci.pagination" :ascOptions="ci.ascOptions" :showCheckbox="needCheckout" :isRefreshable="true" @actionFun="actionFun" @sortHandler="sortHandler" @handleSubmit="handleSubmit" @getSelectedRows="onSelectedRowsChange" @pageChange="pageChange" @pageSizeChange="pageSizeChange" tableHeight="650" :ref="'table' + ci.id"></WeCMDBTable>
       </TabPane>
     </Tabs>
   </div>
 </template>
 
 <script>
-import * as d3 from "d3-selection";
-import * as d3Graphviz from "d3-graphviz";
+import * as d3 from 'd3-selection'
+// eslint-disable-next-line no-unused-vars
+import * as d3Graphviz from 'd3-graphviz'
 
-import {
-  getDeployCiData,
-  getDeployDesignTabs,
-  getCiTypeAttributes,
-  deleteCiDatas,
-  createCiDatas,
-  updateCiDatas,
-  getSystemDesigns,
-  getEnumCodesByCategoryId,
-  previewDeployGraph,
-  getAllDeployTreesFromDesignCi,
-  startProcessInstancesWithCiDataInbatch,
-  getAllCITypes,
-  operateCiState,
-  getApplicationDeploymentDesignDataTree,
-  getAllZoneLinkGroupByIdc,
-  getAllNonSystemEnumCodes,
-  queryEnumCategories,
-  queryEnumCodes
-} from "@/api/server.js";
-import {
-  outerActions,
-  innerActions,
-  pagination,
-  components
-} from "@/const/actions.js";
-import { formatData } from "../util/format.js";
-const endEvent = require("../images/endEvent.png");
-const errEndEvent = require("../images/errEndEvent.png");
-const eventBasedGateway = require("../images/eventBasedGateway.png");
-const exclusiveGateway = require("../images/exclusiveGateway.png");
-const intermediateCatchEvent = require("../images/intermediateCatchEvent.png");
-const startEvent = require("../images/startEvent.png");
-const serviceTask = require("../images/serviceTask.png");
-import { getExtraInnerActions } from "../util/state-operations.js";
-import PhysicalGraph from "./physical-graph";
+import { getDeployCiData, getDeployDesignTabs, getCiTypeAttributes, deleteCiDatas, createCiDatas, updateCiDatas, getSystemDesigns, getEnumCodesByCategoryId, getAllDeployTreesFromDesignCi, startProcessInstancesWithCiDataInbatch, getAllCITypes, operateCiState, getApplicationDeploymentDesignDataTree, getAllZoneLinkGroupByIdc, getAllNonSystemEnumCodes, queryEnumCategories, queryEnumCodes } from '@/api/server.js'
+import { outerActions, innerActions, pagination, components } from '@/const/actions.js'
+import { formatData } from '../util/format.js'
+import { getExtraInnerActions } from '../util/state-operations.js'
+import PhysicalGraph from './physical-graph'
 const stateColorMap = new Map([
-  ["new", "#19be6b"],
-  ["created", "#19be6b"],
-  ["update", "#2d8cf0"],
-  ["change", "#2d8cf0"],
-  ["destroyed", "#ed4014"],
-  ["delete", "#ed4014"]
-]);
+  ['new', '#19be6b'],
+  ['created', '#19be6b'],
+  ['update', '#2d8cf0'],
+  ['change', '#2d8cf0'],
+  ['destroyed', '#ed4014'],
+  ['delete', '#ed4014']
+])
 
-const colors = [
-  "#bbdefb",
-  "#90caf9",
-  "#64b5f6",
-  "#42a5f5",
-  "#2196f3",
-  "#1e88e5",
-  "#1976d2"
-];
+const colors = ['#bbdefb', '#90caf9', '#64b5f6', '#42a5f5', '#2196f3', '#1e88e5', '#1976d2']
 
 export default {
   components: {
     PhysicalGraph
   },
-  data() {
+  data () {
     return {
       isShowTabs: false,
       systemDesigns: [],
-      systemDesignVersion: "",
+      systemDesignVersion: '',
       envs: [],
-      env: "",
-      currentTab: "logic-graph",
+      env: '',
+      currentTab: 'logic-graph',
       deployTree: [],
       selectedDeployItems: [],
       graphSource: [],
@@ -218,272 +118,226 @@ export default {
       systemData: [],
       physicalGraphData: [],
       physicalGraphLinks: [],
-      serviceCiTypeId: "",
-      invokeCiTypeId: "",
-      instanceCiTypeId: "",
+      serviceCiTypeId: '',
+      invokeCiTypeId: '',
+      instanceCiTypeId: '',
       isDataChanged: false,
       physicalSpin: false,
       graphTree: {},
       layerData: [],
       systemTreeData: [],
       rankNodes: {},
-      treeLayerEnumName: "deploy_tree_layer",
+      treeLayerEnumName: 'deploy_tree_layer',
       treeSpinShow: true
-    };
+    }
   },
   computed: {
-    tableRef() {
-      return "table" + this.currentTab;
+    tableRef () {
+      return 'table' + this.currentTab
     },
-    needCheckout() {
-      return this.$route.name === "ciDataEnquiry" ? false : true;
+    needCheckout () {
+      return this.$route.name !== 'ciDataEnquiry'
     },
-    envCodeId() {
-      return this.envs.find(_ => _.code === this.env).codeId || "";
+    envCodeId () {
+      return this.envs.find(_ => _.code === this.env).codeId || ''
     }
   },
   methods: {
-    initADGraph() {
-      this.spinShow = true;
+    initADGraph () {
+      this.spinShow = true
       const initEvent = () => {
-        let graph = d3.select("#graph");
+        let graph = d3.select('#graph')
 
         graph
-          .on("dblclick.zoom", null)
-          .on("wheel.zoom", null)
-          .on("mousewheel.zoom", null);
+          .on('dblclick.zoom', null)
+          .on('wheel.zoom', null)
+          .on('mousewheel.zoom', null)
         this.graph.graphviz = graph
           .graphviz()
           .scale(1.2)
           .width(window.innerWidth * 0.96)
           .height(window.innerHeight * 0.8)
-          .zoom(true);
-      };
+          .zoom(true)
+      }
 
-      initEvent();
-      this.renderADGraph(this.systemData);
-      this.spinShow = false;
+      initEvent()
+      this.renderADGraph(this.systemData)
+      this.spinShow = false
     },
-    renderADGraph(data) {
-      let nodesString = this.genADDOT(data);
-      this.graph.graphviz.renderDot(nodesString);
+    renderADGraph (data) {
+      let nodesString = this.genADDOT(data)
+      this.graph.graphviz.renderDot(nodesString)
       // TODO
-      let svg = d3.select("#graph").select("svg");
-      let width = svg.attr("width");
-      let height = svg.attr("height");
-      svg.attr("viewBox", "0 0 " + width + " " + height);
+      let svg = d3.select('#graph').select('svg')
+      let width = svg.attr('width')
+      let height = svg.attr('height')
+      svg.attr('viewBox', '0 0 ' + width + ' ' + height)
     },
-    genADDOT(data) {
-      let sysChildren = data || [];
-      let sysIvks = [];
-      let width = 16;
-      let height = 12;
-      const found = this.systemDesigns.find(
-        sys => this.systemDesignVersion === sys.guid
-      );
-      if (!found) return "digraph G {}";
-      let sysLabel = (found && found.code) || "SYS";
-      let graphMap = new Map();
-      let dots = [
-        "digraph G{",
-        "rankdir=LR nodesep=0.5;",
-        'size = "' + width + "," + height + '";',
-        "subgraph cluster_" +
-          found.guid +
-          '{ label="' +
-          sysLabel +
-          '";tooltip="' +
-          found.description +
-          '";'
-      ];
+    genADDOT (data) {
+      let sysChildren = data || []
+      let sysIvks = []
+      let width = 16
+      let height = 12
+      const found = this.systemDesigns.find(sys => this.systemDesignVersion === sys.guid)
+      if (!found) return 'digraph G {}'
+      let sysLabel = (found && found.code) || 'SYS'
+      let graphMap = new Map()
+      let dots = ['digraph G{', 'rankdir=LR nodesep=0.5;', 'size = "' + width + ',' + height + '";', 'subgraph cluster_' + found.guid + '{ label="' + sysLabel + '";tooltip="' + found.description + '";']
       sysChildren.forEach(subsys => {
-        const label = subsys.data.code || subsys.data.key_name;
-        dots.push("subgraph cluster_" + subsys.guid + "{");
-        dots.push(`label="${label}";tooltip="${subsys.data.description}";`);
+        const label = subsys.data.code || subsys.data.key_name
+        dots.push('subgraph cluster_' + subsys.guid + '{')
+        dots.push(`label="${label}";tooltip="${subsys.data.description}";`)
         if (Array.isArray(subsys.children)) {
           subsys.children.forEach(unit => {
-            const unitLabel = unit.data.code || unit.data.key_name;
-            let color = "grey";
+            const unitLabel = unit.data.code || unit.data.key_name
+            let color = 'grey'
             if (unit.data.state && stateColorMap.has(unit.data.state.code)) {
-              color = stateColorMap.get(unit.data.state.code);
+              color = stateColorMap.get(unit.data.state.code)
             }
-            dots.push("subgraph cluster_" + unit.guid + "{");
-            dots.push(
-              `label="${unitLabel}"; style=filled; color="${color}";tooltip="${unit.data.description}"`
-            );
-            dots.push(`"${unit.guid}"[shape="none",`);
-            dots.push(
-              `label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">\n<TR><TD COLSPAN="3"> ${this.$t(
-                "runnint_instance"
-              )} </TD></TR>`
-            );
-            graphMap.set(unit.guid, unitLabel);
+            dots.push('subgraph cluster_' + unit.guid + '{')
+            dots.push(`label="${unitLabel}"; style=filled; color="${color}";tooltip="${unit.data.description}"`)
+            dots.push(`"${unit.guid}"[shape="none",`)
+            dots.push(`label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">\n<TR><TD COLSPAN="3"> ${this.$t('runnint_instance')} </TD></TR>`)
+            graphMap.set(unit.guid, unitLabel)
             if (Array.isArray(unit.children)) {
               unit.children.forEach(child => {
                 if (child.ciTypeId === this.instanceCiTypeId) {
-                  let hostIp = "-";
+                  let hostIp = '-'
                   if (child.data.host && child.data.host.key_name) {
-                    hostIp = child.data.host.key_name || "-";
+                    hostIp = child.data.host.key_name || '-'
                   }
-                  const port = child.data.port || "-";
-                  dots.push(
-                    `<TR><TD> ${child.data.code} </TD><TD> ${hostIp} </TD><TD> ${port} </TD></TR>`
-                  );
+                  const port = child.data.port || '-'
+                  dots.push(`<TR><TD> ${child.data.code} </TD><TD> ${hostIp} </TD><TD> ${port} </TD></TR>`)
                 }
-              });
+              })
             }
-            dots.push(unit.data.key_name + "</TABLE>>]");
+            dots.push(unit.data.key_name + '</TABLE>>]')
             if (Array.isArray(unit.children)) {
               unit.children.forEach(service => {
                 if (service.ciTypeId === this.invokeCiTypeId) {
-                  sysIvks.push(service);
+                  sysIvks.push(service)
                 }
                 if (service.ciTypeId === this.serviceCiTypeId) {
-                  const serviceLabel =
-                    service.data.code || service.data.key_name;
-                  let domain = "";
+                  const serviceLabel = service.data.code || service.data.key_name
+                  let domain = ''
                   if (service.data.dns_domain) {
-                    domain =
-                      service.data.dns_name + service.data.dns_domain.value;
+                    domain = service.data.dns_name + service.data.dns_domain.value
                   } else {
-                    domain = service.data.dns_name;
+                    domain = service.data.dns_name
                   }
-                  const ip = service.data.service_ip.key_name || "";
-                  dots.push(
-                    `"${service.guid}" [shape="record", label="{{ ${this.$t(
-                      "service"
-                    )}: ${serviceLabel}|{ ${domain} | ${
-                      service.data.service_port
-                    } }| ${ip} }}", tooltip="${service.data.description}"];`
-                  );
-                  graphMap.set(service.guid, serviceLabel);
-                  dots.push(
-                    `"${service.guid}" ->"${unit.guid}" [arrowhead="t"];`
-                  );
+                  const ip = service.data.service_ip.key_name || ''
+                  dots.push(`"${service.guid}" [shape="record", label="{{ ${this.$t('service')}: ${serviceLabel}|{ ${domain} | ${service.data.service_port} }| ${ip} }}", tooltip="${service.data.description}"];`)
+                  graphMap.set(service.guid, serviceLabel)
+                  dots.push(`"${service.guid}" ->"${unit.guid}" [arrowhead="t"];`)
                 }
-              });
+              })
             }
-            dots.push("} ");
-          });
+            dots.push('} ')
+          })
         }
-        dots.push("} ");
-      });
-      dots.push("} ");
+        dots.push('} ')
+      })
+      dots.push('} ')
 
       sysIvks.forEach(invoke => {
-        let color = "grey";
+        let color = 'grey'
         if (invoke.data.state && stateColorMap.has(invoke.data.state.code)) {
-          color = stateColorMap.get(invoke.data.state.code);
+          color = stateColorMap.get(invoke.data.state.code)
         }
 
-        dots.push(
-          `"${invoke.data.unit.guid}"->"${invoke.data.service.guid}"[id="${invoke.guid}",color="${color}"];`
-        );
+        dots.push(`"${invoke.data.unit.guid}"->"${invoke.data.service.guid}"[id="${invoke.guid}",color="${color}"];`)
         if (!graphMap.has(invoke.data.unit.guid)) {
-          dots.push(
-            `"${invoke.data.unit.guid}"[label="${invoke.data.unit.key_name}"`
-          );
+          dots.push(`"${invoke.data.unit.guid}"[label="${invoke.data.unit.key_name}"`)
         }
         if (!graphMap.has(invoke.data.service.guid)) {
-          dots.push(
-            `"${invoke.data.service.guid}"[label="${invoke.data.service.key_name}"];`
-          );
+          dots.push(`"${invoke.data.service.guid}"[label="${invoke.data.service.key_name}"];`)
         }
-      });
-      dots.push("}");
-      return dots.join("");
+      })
+      dots.push('}')
+      return dots.join('')
     },
-    async reloadHandler() {
-      this.querySysTree();
-      this.isDataChanged = false;
+    async reloadHandler () {
+      this.querySysTree()
+      this.isDataChanged = false
     },
 
-    onSystemDesignSelect(key) {
-      this.systemDesignVersion = key;
-      this.isShowTabs = false;
-      this.deployTree = [];
-      this.systemData = [];
-      this.systemTreeData = [];
-      this.initADGraph();
-      this.initTreeGraph();
+    onSystemDesignSelect (key) {
+      this.systemDesignVersion = key
+      this.isShowTabs = false
+      this.deployTree = []
+      this.systemData = []
+      this.systemTreeData = []
+      this.initADGraph()
+      this.initTreeGraph()
     },
-    onEnvSelect(key) {
-      this.env = key;
-      this.isShowTabs = false;
-      this.deployTree = [];
-      this.systemData = [];
-      this.systemTreeData = [];
-      this.initADGraph();
-      this.initTreeGraph();
+    onEnvSelect (key) {
+      this.env = key
+      this.isShowTabs = false
+      this.deployTree = []
+      this.systemData = []
+      this.systemTreeData = []
+      this.initADGraph()
+      this.initTreeGraph()
     },
-    async getSystemDesigns() {
-      let { statusCode, data, message } = await getSystemDesigns();
-      if (statusCode === "OK") {
-        this.systemDesigns = data.contents.map(_ => _.data);
+    async getSystemDesigns () {
+      let { statusCode, data } = await getSystemDesigns()
+      if (statusCode === 'OK') {
+        this.systemDesigns = data.contents.map(_ => _.data)
       }
     },
-    async getAllEnvs() {
+    async getAllEnvs () {
       const payload = {
-        filters: [
-          { name: "cat.catName", operator: "eq", value: "deploy_environment" }
-        ],
+        filters: [{ name: 'cat.catName', operator: 'eq', value: 'deploy_environment' }],
         paging: false
-      };
-      const { statusCode, data, message } = await getAllNonSystemEnumCodes(
-        payload
-      );
+      }
+      const { statusCode, data } = await getAllNonSystemEnumCodes(payload)
 
-      if (statusCode === "OK") {
-        this.envs = data.contents;
+      if (statusCode === 'OK') {
+        this.envs = data.contents
       }
     },
-    onTreeCheck(all, current) {
-      this.selectedDeployItems = all;
+    onTreeCheck (all, current) {
+      this.selectedDeployItems = all
     },
-    async querySysTree() {
+    async querySysTree () {
       if (!this.systemDesignVersion || !this.env) {
         this.$Notice.warning({
-          title: "Warning",
-          desc: this.$t("please_select_system_design_and_environmental_type")
-        });
-        return;
+          title: 'Warning',
+          desc: this.$t('please_select_system_design_and_environmental_type')
+        })
+        return
       }
-      this.spinShow = true;
-      this.treeSpinShow = true;
+      this.spinShow = true
+      this.treeSpinShow = true
       if (this.currentTab) {
-        this.queryCiData();
+        this.queryCiData()
       }
-      let { statusCode, message, data } = await getAllCITypes();
-      if (statusCode === "OK") {
+      let { statusCode, data } = await getAllCITypes()
+      if (statusCode === 'OK') {
         data.forEach(ci => {
-          if (ci.tableName === "service") {
-            this.serviceCiTypeId = ci.ciTypeId;
+          if (ci.tableName === 'service') {
+            this.serviceCiTypeId = ci.ciTypeId
           }
-          if (ci.tableName === "invoke") {
-            this.invokeCiTypeId = ci.ciTypeId;
+          if (ci.tableName === 'invoke') {
+            this.invokeCiTypeId = ci.ciTypeId
           }
-          if (ci.tableName === "running_instance") {
-            this.instanceCiTypeId = ci.ciTypeId;
+          if (ci.tableName === 'running_instance') {
+            this.instanceCiTypeId = ci.ciTypeId
           }
-        });
+        })
       }
-      this.physicalSpin = true;
-      this.getAllDeployTreesFromDesignCi();
-      this.getPhysicalGraphData();
+      this.physicalSpin = true
+      this.getAllDeployTreesFromDesignCi()
+      this.getPhysicalGraphData()
     },
-    async getAllDeployTreesFromDesignCi() {
-      const { statusCode, message, data } = await getAllDeployTreesFromDesignCi(
-        this.systemDesignVersion,
-        this.env
-      );
-      if (statusCode === "OK") {
-        this.isShowTabs = true;
-        this.deployTree = this.formatTree(data);
-        this.systemData = data;
-        this.initADGraph();
-        const found = this.systemDesigns.find(
-          sys => this.systemDesignVersion === sys.guid
-        );
+    async getAllDeployTreesFromDesignCi () {
+      const { statusCode, data } = await getAllDeployTreesFromDesignCi(this.systemDesignVersion, this.env)
+      if (statusCode === 'OK') {
+        this.isShowTabs = true
+        this.deployTree = this.formatTree(data)
+        this.systemData = data
+        this.initADGraph()
+        const found = this.systemDesigns.find(sys => this.systemDesignVersion === sys.guid)
         if (found) {
           let systemTreeData = {
             guid: this.systemDesignVersion,
@@ -492,39 +346,33 @@ export default {
             data: {
               code: found.code
             }
-          };
-          this.systemTreeData = [];
-          this.systemTreeData.push(systemTreeData);
-          this.initTreeGraph();
+          }
+          this.systemTreeData = []
+          this.systemTreeData.push(systemTreeData)
+          this.initTreeGraph()
         }
       }
     },
-    async getPhysicalGraphData() {
-      this.physicalGraphData = [];
-      const promiseArray = [
-        getApplicationDeploymentDesignDataTree(
-          this.systemDesignVersion,
-          this.envCodeId
-        ),
-        getAllZoneLinkGroupByIdc()
-      ];
-      const [graphData, links] = await Promise.all(promiseArray);
-      if (graphData.statusCode === "OK") {
+    async getPhysicalGraphData () {
+      this.physicalGraphData = []
+      const promiseArray = [getApplicationDeploymentDesignDataTree(this.systemDesignVersion, this.envCodeId), getAllZoneLinkGroupByIdc()]
+      const [graphData, links] = await Promise.all(promiseArray)
+      if (graphData.statusCode === 'OK') {
         if (graphData.data.length) {
-          this.physicalGraphData = graphData.data;
+          this.physicalGraphData = graphData.data
         } else {
-          this.physicalGraphData = [];
-          this.physicalSpin = false;
+          this.physicalGraphData = []
+          this.physicalSpin = false
         }
       }
-      if (links.statusCode === "OK") {
-        this.physicalGraphLinks = links.data || [];
+      if (links.statusCode === 'OK') {
+        this.physicalGraphLinks = links.data || []
       }
     },
-    graphCallback() {
-      this.physicalSpin = false;
+    graphCallback () {
+      this.physicalSpin = false
     },
-    formatTree(data) {
+    formatTree (data) {
       return data.map(_ => {
         if (_.children && _.children.length > 0) {
           return {
@@ -535,7 +383,7 @@ export default {
             expand: true,
             disableCheckbox: !_.data.WeCMDBOrchestration,
             children: this.formatTree(_.children)
-          };
+          }
         } else {
           return {
             ..._,
@@ -543,20 +391,20 @@ export default {
             id: _.guid,
             expand: true,
             disableCheckbox: !_.data.WeCMDBOrchestration
-          };
+          }
         }
-      });
+      })
     },
-    async executeDeploy() {
+    async executeDeploy () {
       let payload = {
         attach: {
           attachItems: [
             {
-              filterName: "systemDesignVersion",
+              filterName: 'systemDesignVersion',
               filterValue: this.systemDesignVersion
             },
             {
-              filterName: "env",
+              filterName: 'env',
               filterValue: this.env
             }
           ]
@@ -566,498 +414,441 @@ export default {
             ciDataId: _.guid,
             ciTypeId: _.ciTypeId,
             processDefinitionKey: _.data.WeCMDBOrchestration.codeId
-          };
+          }
         })
-      };
-      const {
-        statusCode,
-        data,
-        message
-      } = await startProcessInstancesWithCiDataInbatch(payload);
-      if (statusCode === "OK") {
+      }
+      const { statusCode, message } = await startProcessInstancesWithCiDataInbatch(payload)
+      if (statusCode === 'OK') {
         this.$Notice.success({
-          title: this.$t("start_execution"),
+          title: this.$t('start_execution'),
           desc: message
-        });
+        })
       }
     },
-    initTreeGraph(filters = {}) {
-      this.treeSpinShow = true;
-      let graph;
+    initTreeGraph (filters = {}) {
+      this.treeSpinShow = true
+      let graph
       const initEvent = () => {
-        graph = d3.select("#graphTree");
+        graph = d3.select('#graphTree')
         graph
-          .on("dblclick.zoom", null)
-          .on("wheel.zoom", null)
-          .on("mousewheel.zoom", null);
+          .on('dblclick.zoom', null)
+          .on('wheel.zoom', null)
+          .on('mousewheel.zoom', null)
         this.graphTree.graphviz = graph
           .graphviz()
           .scale(1.2)
           .width(window.innerWidth * 0.96)
           .height(window.innerHeight * 0.8)
-          .zoom(true);
-      };
-
-      initEvent();
-      this.renderTreeGraph(this.systemTreeData);
-      this.treeSpinShow = false;
-    },
-    renderTreeGraph(data) {
-      let nodesString = this.genTreeDOT(data);
-      this.graphTree.graphviz.renderDot(nodesString);
-      let svg = d3.select("#graphTree").select("svg");
-      let width = svg.attr("width");
-      let height = svg.attr("height");
-      svg.attr("viewBox", "0 0 " + width + " " + height);
-    },
-    genTreeDOT(data) {
-      if (data.length === 0) {
-        return "digraph G {}";
+          .zoom(true)
       }
-      const width = 16;
-      const height = 12;
-      let dots = [
-        "digraph G{",
-        "rankdir=TB nodesep=0.5;",
-        `size="${width},${height}";`,
-        ...this.genlayerDot(this.layerData),
-        "Node [fontname=Arial, fontsize=12];",
-        'Edge [fontname=Arial, minlen="2", fontsize=10, arrowhead="t"];',
-        ...this.genChildrenDot(data || [], 1),
-        ...this.genRankNodeDot(),
-        "}"
-      ];
-      return dots.join(" ");
+
+      initEvent()
+      this.renderTreeGraph(this.systemTreeData)
+      this.treeSpinShow = false
     },
-    genlayerDot(data) {
-      let layerDot = [];
-      layerDot.push("{");
-      layerDot.push("node [shape=plaintext, fontsize=16];");
+    renderTreeGraph (data) {
+      let nodesString = this.genTreeDOT(data)
+      this.graphTree.graphviz.renderDot(nodesString)
+      let svg = d3.select('#graphTree').select('svg')
+      let width = svg.attr('width')
+      let height = svg.attr('height')
+      svg.attr('viewBox', '0 0 ' + width + ' ' + height)
+    },
+    genTreeDOT (data) {
+      if (data.length === 0) {
+        return 'digraph G {}'
+      }
+      const width = 16
+      const height = 12
+      let dots = ['digraph G{', 'rankdir=TB nodesep=0.5;', `size="${width},${height}";`, ...this.genlayerDot(this.layerData), 'Node [fontname=Arial, fontsize=12];', 'Edge [fontname=Arial, minlen="2", fontsize=10, arrowhead="t"];', ...this.genChildrenDot(data || [], 1), ...this.genRankNodeDot(), '}']
+      return dots.join(' ')
+    },
+    genlayerDot (data) {
+      let layerDot = []
+      layerDot.push('{')
+      layerDot.push('node [shape=plaintext, fontsize=16];')
       data.forEach((element, index) => {
         if (index === data.length - 1) {
-          layerDot.push(`"title_${element.code}"`);
+          layerDot.push(`"title_${element.code}"`)
         } else {
-          layerDot.push(`"title_${element.code}" -> `);
+          layerDot.push(`"title_${element.code}" -> `)
         }
-        this.rankNodes[element.code] = [];
-        this.rankNodes[element.code].push(element.value);
-      });
-      layerDot.push(" [style=invis]");
-      layerDot.push("}");
-      return layerDot;
+        this.rankNodes[element.code] = []
+        this.rankNodes[element.code].push(element.value)
+      })
+      layerDot.push(' [style=invis]')
+      layerDot.push('}')
+      return layerDot
     },
-    genChildrenDot(data, level) {
-      let dots = [];
+    genChildrenDot (data, level) {
+      let dots = []
       data.forEach(_ => {
-        dots = dots.concat([
-          `"${_.guid}"`,
-          `[id="n_${_.guid}";`,
-          `label="${_.data.code || _.data.key_name}";`,
-          "shape=ellipse;",
-          `style="filled";color="${colors[level]}";`,
-          `tooltip="${_.data.description || "-"}"];`
-        ]);
-        this.rankNodes[_.ciTypeId].push(`"${_.guid}"`);
+        dots = dots.concat([`"${_.guid}"`, `[id="n_${_.guid}";`, `label="${_.data.code || _.data.key_name}";`, 'shape=ellipse;', `style="filled";color="${colors[level]}";`, `tooltip="${_.data.description || '-'}"];`])
+        this.rankNodes[_.ciTypeId].push(`"${_.guid}"`)
         if (_.children instanceof Array && _.children.length) {
-          dots = dots.concat(this.genChildrenDot(_.children, level + 1));
+          dots = dots.concat(this.genChildrenDot(_.children, level + 1))
           _.children.forEach(c => {
-            dots = dots.concat([`"${_.guid}" -> "${c.guid}";`]);
-          });
+            dots = dots.concat([`"${_.guid}" -> "${c.guid}";`])
+          })
         }
-      });
-      return dots;
+      })
+      return dots
     },
-    genRankNodeDot() {
-      let dot = [];
+    genRankNodeDot () {
+      let dot = []
       Object.keys(this.rankNodes).forEach((key, index) => {
-        dot.push("{rank=same;");
+        dot.push('{rank=same;')
         this.rankNodes[key].forEach((_, i) => {
           if (i === 0) {
-            dot.push(`"title_${key}"[label="${_}";tooltip="${_}"];`);
+            dot.push(`"title_${key}"[label="${_}";tooltip="${_}"];`)
           } else {
-            dot.push(`${_};`);
+            dot.push(`${_};`)
           }
-        });
-        dot.push("}");
-      });
-      return dot;
+        })
+        dot.push('}')
+      })
+      return dot
     },
-    async queryTreeLayerData() {
+    async queryTreeLayerData () {
       let request = {
         filters: [
           {
-            name: "catName",
-            operator: "eq",
+            name: 'catName',
+            operator: 'eq',
             value: this.treeLayerEnumName
           }
         ]
-      };
-      const { statusCode, message, data } = await queryEnumCategories(request);
-      if (statusCode === "OK") {
-        let catId = data.contents[0].catId;
-        const response = await queryEnumCodes(0, catId, {});
-        if (response.statusCode === "OK") {
-          this.layerData = response.data.contents;
+      }
+      const { statusCode, data } = await queryEnumCategories(request)
+      if (statusCode === 'OK') {
+        let catId = data.contents[0].catId
+        const response = await queryEnumCodes(0, catId, {})
+        if (response.statusCode === 'OK') {
+          this.layerData = response.data.contents
         }
       }
     },
-    handleTabClick(name) {
-      this.payload.filters = [];
-      this.currentTab = name;
-      if (
-        this.currentTab !== "logic-graph" &&
-        this.currentTab !== "deploy-detail" &&
-        this.currentTab !== "physicalGraph" &&
-        this.currentTab !== "logic-tree-graph"
-      ) {
-        this.getCurrentData();
+    handleTabClick (name) {
+      this.payload.filters = []
+      this.currentTab = name
+      if (this.currentTab !== 'logic-graph' && this.currentTab !== 'deploy-detail' && this.currentTab !== 'physicalGraph' && this.currentTab !== 'logic-tree-graph') {
+        this.getCurrentData()
       }
     },
-    getCurrentData() {
-      this.queryCiAttrs(this.currentTab);
-      this.queryCiData();
+    getCurrentData () {
+      this.queryCiAttrs(this.currentTab)
+      this.queryCiData()
     },
-    onSelectedRowsChange(rows, checkoutBoxdisable) {
+    onSelectedRowsChange (rows, checkoutBoxdisable) {
       if (rows.length > 0) {
-        let isUpdateableAry = [];
-        let isDeleteableAry = [];
+        let isUpdateableAry = []
+        let isDeleteableAry = []
 
         rows.forEach((r, index) => {
-          isUpdateableAry.push(!!r.nextOperations.find(op => op === "update"));
-          isDeleteableAry.push(!!r.nextOperations.find(op => op === "delete"));
-        });
+          isUpdateableAry.push(!!r.nextOperations.find(op => op === 'update'))
+          isDeleteableAry.push(!!r.nextOperations.find(op => op === 'delete'))
+        })
         let isValueTrue = val => {
-          return val === true;
-        };
+          return val === true
+        }
 
         this.tabList.forEach(ci => {
           if (ci.id === this.currentTab) {
             ci.outerActions.forEach(_ => {
               switch (_.actionType) {
-                case "add":
-                  _.props.disabled = _.actionType === "add";
-                  break;
-                case "edit":
-                  _.props.disabled = !isUpdateableAry.every(isValueTrue);
-                  break;
-                case "delete":
-                  _.props.disabled = !isDeleteableAry.every(isValueTrue);
-                  break;
+                case 'add':
+                  _.props.disabled = _.actionType === 'add'
+                  break
+                case 'edit':
+                  _.props.disabled = !isUpdateableAry.every(isValueTrue)
+                  break
+                case 'delete':
+                  _.props.disabled = !isDeleteableAry.every(isValueTrue)
+                  break
                 default:
-                  break;
+                  break
               }
-            });
+            })
           }
-        });
+        })
       } else {
         this.tabList.forEach(ci => {
           if (ci.id === this.currentTab) {
             ci.outerActions.forEach(_ => {
-              _.props.disabled = !(
-                _.actionType === "add" ||
-                _.actionType === "export" ||
-                _.actionType === "cancel"
-              );
-            });
+              _.props.disabled = !(_.actionType === 'add' || _.actionType === 'export' || _.actionType === 'cancel')
+            })
           }
-        });
+        })
       }
     },
-    actionFun(type, data) {
+    actionFun (type, data) {
       switch (type) {
-        case "export":
-          this.exportHandler();
-          break;
-        case "add":
-          this.addHandler();
-          break;
-        case "edit":
-          this.editHandler();
-          break;
-        case "save":
-          this.saveHandler(data);
-          break;
-        case "delete":
-          this.deleteHandler(data);
-          break;
-        case "cancel":
-          this.cancelHandler();
-          break;
-        case "innerCancel":
-          this.$refs[this.tableRef][0].rowCancelHandler(data.weTableRowId);
-          break;
+        case 'export':
+          this.exportHandler()
+          break
+        case 'add':
+          this.addHandler()
+          break
+        case 'edit':
+          this.editHandler()
+          break
+        case 'save':
+          this.saveHandler(data)
+          break
+        case 'delete':
+          this.deleteHandler(data)
+          break
+        case 'cancel':
+          this.cancelHandler()
+          break
+        case 'innerCancel':
+          this.$refs[this.tableRef][0].rowCancelHandler(data.weTableRowId)
+          break
         default:
-          this.defaultHandler(type, data);
-          break;
+          this.defaultHandler(type, data)
+          break
       }
     },
-    sortHandler(data) {
-      if (data.order === "normal") {
-        delete this.payload.sorting;
+    sortHandler (data) {
+      if (data.order === 'normal') {
+        delete this.payload.sorting
       } else {
         this.payload.sorting = {
-          asc: data.order === "asc",
+          asc: data.order === 'asc',
           field: data.key
-        };
+        }
       }
-      this.getCurrentData();
+      this.getCurrentData()
     },
-    handleSubmit(data) {
-      this.payload.filters = data;
-      this.getCurrentData();
+    handleSubmit (data) {
+      this.payload.filters = data
+      this.getCurrentData()
     },
-    async defaultHandler(type, row) {
-      const { data, statusCode, message } = await operateCiState(
-        this.currentTab,
-        row.guid,
-        type
-      );
-      if (statusCode === "OK") {
+    async defaultHandler (type, row) {
+      const { statusCode, message } = await operateCiState(this.currentTab, row.guid, type)
+      if (statusCode === 'OK') {
         this.$Notice.success({
           title: type,
           desc: message
-        });
-        this.queryCiData();
+        })
+        this.queryCiData()
       }
     },
 
-    addHandler() {
+    addHandler () {
       this.tabList.forEach(ci => {
         if (ci.id === this.currentTab) {
-          let emptyRowData = {};
+          let emptyRowData = {}
           ci.tableColumns.forEach(_ => {
-            if (_.inputType === "multiSelect" || _.inputType === "multiRef") {
-              emptyRowData[_.inputKey] = [];
+            if (_.inputType === 'multiSelect' || _.inputType === 'multiRef') {
+              emptyRowData[_.inputKey] = []
             } else {
-              emptyRowData[_.inputKey] = "";
+              emptyRowData[_.inputKey] = ''
             }
-          });
-          emptyRowData["isRowEditable"] = true;
-          emptyRowData["isNewAddedRow"] = true;
-          emptyRowData["weTableRowId"] = 1;
-          emptyRowData["nextOperations"] = [];
+          })
+          emptyRowData['isRowEditable'] = true
+          emptyRowData['isNewAddedRow'] = true
+          emptyRowData['weTableRowId'] = 1
+          emptyRowData['nextOperations'] = []
 
-          ci.tableData.unshift(emptyRowData);
+          ci.tableData.unshift(emptyRowData)
           this.$nextTick(() => {
-            this.$refs[this.tableRef][0].pushNewAddedRowToSelections();
-            this.$refs[this.tableRef][0].setCheckoutStatus(true);
-          });
+            this.$refs[this.tableRef][0].pushNewAddedRowToSelections()
+            this.$refs[this.tableRef][0].setCheckoutStatus(true)
+          })
           ci.outerActions.forEach(_ => {
-            _.props.disabled = _.actionType === "add";
-          });
+            _.props.disabled = _.actionType === 'add'
+          })
         }
-      });
+      })
     },
-    cancelHandler() {
-      this.$refs[this.tableRef][0].setAllRowsUneditable();
-      this.$refs[this.tableRef][0].setCheckoutStatus();
+    cancelHandler () {
+      this.$refs[this.tableRef][0].setAllRowsUneditable()
+      this.$refs[this.tableRef][0].setCheckoutStatus()
       this.tabList.forEach(ci => {
         if (ci.id === this.currentTab) {
           ci.outerActions.forEach(_ => {
-            _.props.disabled = !(
-              _.actionType === "add" ||
-              _.actionType === "export" ||
-              _.actionType === "cancel"
-            );
-          });
+            _.props.disabled = !(_.actionType === 'add' || _.actionType === 'export' || _.actionType === 'cancel')
+          })
         }
-      });
+      })
     },
-    deleteHandler(deleteData) {
+    deleteHandler (deleteData) {
       this.$Modal.confirm({
-        title: this.$t("delete_confirm"),
-        "z-index": 1000000,
+        title: this.$t('delete_confirm'),
+        'z-index': 1000000,
         onOk: async () => {
           const payload = {
             id: this.currentTab,
             deleteData: deleteData.map(_ => _.guid)
-          };
-          const { statusCode, message, data } = await deleteCiDatas(payload);
-          if (statusCode === "OK") {
+          }
+          const { statusCode, message } = await deleteCiDatas(payload)
+          if (statusCode === 'OK') {
             this.$Notice.success({
-              title: "Delete data Success",
+              title: 'Delete data Success',
               desc: message
-            });
-            this.isDataChanged = true;
+            })
+            this.isDataChanged = true
             this.tabList.forEach(ci => {
               if (ci.id === this.currentTab) {
                 ci.outerActions.forEach(_ => {
-                  _.props.disabled =
-                    _.actionType === "save" ||
-                    _.actionType === "edit" ||
-                    _.actionType === "delete";
-                });
+                  _.props.disabled = _.actionType === 'save' || _.actionType === 'edit' || _.actionType === 'delete'
+                })
               }
-            });
-            this.getCurrentData();
+            })
+            this.getCurrentData()
           }
         },
         onCancel: () => {}
-      });
-      document.querySelector(".ivu-modal-mask").click();
+      })
+      document.querySelector('.ivu-modal-mask').click()
     },
-    editHandler() {
-      this.$refs[this.tableRef][0].swapRowEditable(true);
+    editHandler () {
+      this.$refs[this.tableRef][0].swapRowEditable(true)
       this.tabList.forEach(ci => {
         if (ci.id === this.currentTab) {
           ci.outerActions.forEach(_ => {
-            if (_.actionType === "save") {
-              _.props.disabled = false;
+            if (_.actionType === 'save') {
+              _.props.disabled = false
             }
-          });
+          })
         }
-      });
+      })
       this.$nextTick(() => {
-        this.$refs[this.tableRef][0].setCheckoutStatus(true);
-      });
+        this.$refs[this.tableRef][0].setCheckoutStatus(true)
+      })
     },
-    deleteAttr() {
-      let attrs = [];
-      const found = this.tabList.find(_ => _.id === this.currentTab);
+    deleteAttr () {
+      let attrs = []
+      const found = this.tabList.find(_ => _.id === this.currentTab)
       found.tableColumns.forEach(i => {
         if (i.isAuto) {
-          attrs.push(i.propertyName);
+          attrs.push(i.propertyName)
         }
-      });
-      return attrs;
+      })
+      return attrs
     },
-    async saveHandler(data) {
+    async saveHandler (data) {
       let setBtnsStatus = () => {
         this.tabList.forEach(ci => {
           if (ci.id === this.currentTab) {
             ci.outerActions.forEach(_ => {
-              _.props.disabled = !(
-                _.actionType === "add" || _.actionType === "export"
-              );
-            });
+              _.props.disabled = !(_.actionType === 'add' || _.actionType === 'export')
+            })
           }
-        });
-        this.$refs[this.tableRef][0].setAllRowsUneditable();
+        })
+        this.$refs[this.tableRef][0].setAllRowsUneditable()
         this.$nextTick(() => {
           /* to get iview original data to set _ischecked flag */
-          let objData = this.$refs[this.tableRef][0].$refs.table.$refs.tbody
-            .objData;
+          let objData = this.$refs[this.tableRef][0].$refs.table.$refs.tbody.objData
           for (let obj in objData) {
-            objData[obj]._isChecked = false;
-            objData[obj]._isDisabled = false;
+            objData[obj]._isChecked = false
+            objData[obj]._isDisabled = false
           }
-        });
-      };
+        })
+      }
 
-      let d = JSON.parse(JSON.stringify(data));
-      let addAry = d.filter(_ => _.isNewAddedRow);
-      let editAry = d.filter(_ => !_.isNewAddedRow);
+      let d = JSON.parse(JSON.stringify(data))
+      let addAry = d.filter(_ => _.isNewAddedRow)
+      let editAry = d.filter(_ => !_.isNewAddedRow)
       if (addAry.length > 0) {
-        const deleteAttrs = this.deleteAttr();
+        const deleteAttrs = this.deleteAttr()
         addAry.forEach(_ => {
           deleteAttrs.forEach(attr => {
-            delete _[attr];
-          });
-          delete _.isRowEditable;
-          delete _.weTableForm;
-          delete _.weTableRowId;
-          delete _.isNewAddedRow;
-          delete _.nextOperations;
-        });
-        let found = this.tabList.find(i => i.id === this.currentTab);
+            delete _[attr]
+          })
+          delete _.isRowEditable
+          delete _.weTableForm
+          delete _.weTableRowId
+          delete _.isNewAddedRow
+          delete _.nextOperations
+        })
+        let found = this.tabList.find(i => i.id === this.currentTab)
         let payload = {
           id: found && found.code,
           createData: addAry
-        };
-        const { statusCode, message, data } = await createCiDatas(payload);
-        if (statusCode === "OK") {
+        }
+        const { statusCode, message } = await createCiDatas(payload)
+        if (statusCode === 'OK') {
           this.$Notice.success({
-            title: "Add data Success",
+            title: 'Add data Success',
             desc: message
-          });
-          this.isDataChanged = true;
-          setBtnsStatus();
-          this.getCurrentData();
+          })
+          this.isDataChanged = true
+          setBtnsStatus()
+          this.getCurrentData()
         }
       }
       if (editAry.length > 0) {
         editAry.forEach(_ => {
-          delete _.isRowEditable;
-          delete _.weTableForm;
-          delete _.weTableRowId;
-          delete _.isNewAddedRow;
-          delete _.nextOperations;
-        });
+          delete _.isRowEditable
+          delete _.weTableForm
+          delete _.weTableRowId
+          delete _.isNewAddedRow
+          delete _.nextOperations
+        })
 
-        let found = this.tabList.find(i => i.id === this.currentTab);
+        let found = this.tabList.find(i => i.id === this.currentTab)
 
         let payload = {
           id: found && found.code,
           updateData: editAry
-        };
-        const { statusCode, message, data } = await updateCiDatas(payload);
-        if (statusCode === "OK") {
+        }
+        const { statusCode, message } = await updateCiDatas(payload)
+        if (statusCode === 'OK') {
           this.$Notice.success({
-            title: "Update data Success",
+            title: 'Update data Success',
             desc: message
-          });
-          this.isDataChanged = true;
-          setBtnsStatus();
-          this.getCurrentData();
+          })
+          this.isDataChanged = true
+          setBtnsStatus()
+          this.getCurrentData()
         }
       }
     },
-    async exportHandler() {
-      let found = this.tabList.find(i => i.code === this.currentTab);
+    async exportHandler () {
+      let found = this.tabList.find(i => i.code === this.currentTab)
       let requst = {
         codeId: found.codeId,
         envCode: this.env,
         systemDesignGuid: this.systemDesignVersion
-      };
+      }
 
       let exportPayload = {
         ...this.payload,
         paging: false
-      };
-      const { statusCode, message, data } = await getDeployCiData(
-        requst,
-        exportPayload
-      );
-      if (statusCode === "OK") {
+      }
+      const { statusCode, data } = await getDeployCiData(requst, exportPayload)
+      if (statusCode === 'OK') {
         this.$refs[this.tableRef][0].export({
-          filename: "Ci Data",
+          filename: 'Ci Data',
           data: formatData(data.contents.map(_ => _.data))
-        });
+        })
       }
     },
-    pageChange(current) {
+    pageChange (current) {
       this.tabList.forEach(ci => {
         if (ci.id === this.currentTab) {
-          ci.pagination.currentPage = current;
+          ci.pagination.currentPage = current
         }
-      });
-      this.getCurrentData();
+      })
+      this.getCurrentData()
     },
-    pageSizeChange(size) {
+    pageSizeChange (size) {
       this.tabList.forEach(ci => {
         if (ci.id === this.currentTab) {
-          ci.pagination.pageSize = size;
+          ci.pagination.pageSize = size
         }
-      });
-      this.getCurrentData();
+      })
+      this.getCurrentData()
     },
-    async queryCiAttrs(id) {
-      const { statusCode, message, data } = await getCiTypeAttributes(id);
-      let columns = [];
-      const disabledCol = [
-        "created_date",
-        "updated_date",
-        "created_by",
-        "updated_by",
-        "key_name",
-        "guid"
-      ];
-      if (statusCode === "OK") {
-        let columns = [];
+    async queryCiAttrs (id) {
+      const { statusCode, data } = await getCiTypeAttributes(id)
+      if (statusCode === 'OK') {
+        let columns = []
         data.forEach(_ => {
-          const disEditor = disabledCol.find(i => i === _.propertyName);
-          let renderKey = _.propertyName;
-          if (_.status !== "decommissioned" && _.status !== "notCreated") {
+          let renderKey = _.propertyName
+          if (_.status !== 'decommissioned' && _.status !== 'notCreated') {
             columns.push({
               ..._,
               title: _.name,
@@ -1068,90 +859,83 @@ export default {
               disEditor: !_.isEditable,
               disAdded: !_.isEditable,
               placeholder: _.name,
-              component: "Input",
+              component: 'Input',
               ciType: { id: _.referenceId, name: _.name },
-              type: "text",
+              type: 'text',
               ...components[_.inputType]
-            });
+            })
           }
-        });
+        })
         this.tabList.forEach(ci => {
           if (ci.id === this.currentTab) {
-            ci.tableColumns = this.getSelectOptions(columns);
+            ci.tableColumns = this.getSelectOptions(columns)
           }
-        });
+        })
       }
     },
-    getSelectOptions(columns) {
+    getSelectOptions (columns) {
       columns.forEach(async _ => {
-        if (_.inputType === "select") {
-          const { status, message, data } = await getEnumCodesByCategoryId(
-            0,
-            _.referenceId
-          );
-          _["options"] = data
-            .filter(j => j.status === "active")
+        if (_.inputType === 'select') {
+          const { data } = await getEnumCodesByCategoryId(0, _.referenceId)
+          _['options'] = data
+            .filter(j => j.status === 'active')
             .map(i => {
               return {
                 label: i.value,
                 value: i.codeId
-              };
-            });
+              }
+            })
         }
-      });
-      return columns;
+      })
+      return columns
     },
 
-    async queryCiData() {
-      if (this.env === "" || this.systemDesignVersion === "") {
+    async queryCiData () {
+      if (this.env === '' || this.systemDesignVersion === '') {
         this.$Notice.warning({
-          title: "Warning",
-          desc: this.$t("please_select_system_design_and_environmental_type")
-        });
-        return;
+          title: 'Warning',
+          desc: this.$t('please_select_system_design_and_environmental_type')
+        })
+        return
       }
-      this.payload.pageable.pageSize = 10;
-      this.payload.pageable.startIndex = 0;
+      this.payload.pageable.pageSize = 10
+      this.payload.pageable.startIndex = 0
       this.tabList.forEach(ci => {
         if (ci.id === this.currentTab) {
-          this.payload.pageable.pageSize = ci.pagination.pageSize;
-          this.payload.pageable.startIndex =
-            (ci.pagination.currentPage - 1) * ci.pagination.pageSize;
+          this.payload.pageable.pageSize = ci.pagination.pageSize
+          this.payload.pageable.startIndex = (ci.pagination.currentPage - 1) * ci.pagination.pageSize
         }
-      });
-      let found = this.tabList.find(i => i.code === this.currentTab);
-      if (!found) return;
+      })
+      let found = this.tabList.find(i => i.code === this.currentTab)
+      if (!found) return
       let requst = {
         codeId: found.codeId,
         envCode: this.env,
         systemDesignGuid: this.systemDesignVersion
-      };
+      }
 
-      const { statusCode, message, data } = await getDeployCiData(
-        requst,
-        this.payload
-      );
-      if (statusCode === "OK") {
+      const { statusCode, data } = await getDeployCiData(requst, this.payload)
+      if (statusCode === 'OK') {
         this.tabList.forEach(ci => {
           if (ci.id === this.currentTab) {
             ci.tableData = data
               ? data.contents.map(_ => {
-                  return {
-                    ..._.data,
-                    nextOperations: _.meta.nextOperations || []
-                  };
-                })
-              : [];
-            ci.pagination.total = data ? data.pageInfo.totalRows : 0;
+                return {
+                  ..._.data,
+                  nextOperations: _.meta.nextOperations || []
+                }
+              })
+              : []
+            ci.pagination.total = data ? data.pageInfo.totalRows : 0
           }
-        });
+        })
       }
     },
-    async getDeployDesignTabs() {
-      const { statusCode, message, data } = await getDeployDesignTabs();
-      if (statusCode === "OK") {
-        let allInnerActions = await getExtraInnerActions();
-        if (statusCode === "OK") {
+    async getDeployDesignTabs () {
+      const { statusCode, data } = await getDeployDesignTabs()
+      if (statusCode === 'OK') {
+        let allInnerActions = await getExtraInnerActions()
+        if (statusCode === 'OK') {
           this.tabList = data.map(_ => {
             return {
               ..._,
@@ -1160,24 +944,22 @@ export default {
               tableData: [],
               tableColumns: [],
               outerActions: JSON.parse(JSON.stringify(outerActions)),
-              innerActions: JSON.parse(
-                JSON.stringify(innerActions.concat(allInnerActions))
-              ),
+              innerActions: JSON.parse(JSON.stringify(innerActions.concat(allInnerActions))),
               pagination: JSON.parse(JSON.stringify(pagination)),
               ascOptions: {}
-            };
-          });
+            }
+          })
         }
       }
     }
   },
-  created() {
-    this.getSystemDesigns();
-    this.getAllEnvs();
-    this.getDeployDesignTabs();
-    this.queryTreeLayerData();
+  created () {
+    this.getSystemDesigns()
+    this.getAllEnvs()
+    this.getDeployDesignTabs()
+    this.queryTreeLayerData()
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
