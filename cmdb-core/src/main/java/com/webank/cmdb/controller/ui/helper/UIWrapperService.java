@@ -5,15 +5,13 @@ import static com.webank.cmdb.dto.QueryRequest.defaultQueryObject;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.webank.cmdb.util.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,12 +58,10 @@ import com.webank.cmdb.service.CiTypeService;
 import com.webank.cmdb.service.IntegrationQueryService;
 import com.webank.cmdb.service.StaticDtoService;
 import com.webank.cmdb.service.impl.FilterRuleService;
-import com.webank.cmdb.util.BeanMapUtils;
-import com.webank.cmdb.util.ResourceDto;
-import com.webank.cmdb.util.Sorting;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Slf4j
@@ -1688,4 +1684,94 @@ public class UIWrapperService {
         return ystemDesignData;
     }
 
+    public QueryResponse<CiTypeDto> exportModel() {
+        QueryRequest queryRequest = new QueryRequest();
+        queryRequest.addReferenceResource("attributes");
+        return staticDtoService.query(CiTypeDto.class, queryRequest);
+
+    }
+
+    public List<CiTypeDto> importModel(MultipartFile file) {
+        try (BufferedReader br = new BufferedReader((new InputStreamReader(file.getInputStream(), "utf-8")))) {
+            String line;
+            StringBuffer sb = new StringBuffer();
+            try {
+                while ((line = br.readLine()) != null) {
+                    String originBigData = line.trim();
+                    sb.append(originBigData);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return JsonUtil.toList(sb.toString(),CiTypeDto.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void applyModel(List<CiTypeDto> importModel) {
+        List<CiTypeDto> currentModel = exportModel().getContents();
+        applyCiType(importModel, currentModel);
+        applyCiTypeAttrs(importModel, currentModel);
+    }
+
+    private void applyCiTypeAttrs(List<CiTypeDto> importModel, List<CiTypeDto> currentModel) {
+        List<CiTypeAttrDto>importAttrs = new LinkedList<>();
+        List<CiTypeAttrDto>currentAttrs = new LinkedList<>();
+        importModel.forEach(importCiType -> {
+            importAttrs.addAll(importCiType.getAttributes());
+        });
+        currentModel.forEach(currentCiType -> {
+            currentAttrs.addAll(currentCiType.getAttributes());
+        });
+        Map<String, List<CiTypeAttrDto>> diffCiTypeAttr = getDiffent(currentAttrs,importAttrs);
+        ciModelAddOrModify(CiTypeAttrDto.class, diffCiTypeAttr.get("addOrModifyRs"));
+        ciTypeAttrDelete(diffCiTypeAttr.get("deleteRs"));
+    }
+
+    private void applyCiType(List<CiTypeDto> importModel, List<CiTypeDto> currentModel) {
+        Map<String, List<CiTypeDto>> diffCiType = getDiffent(currentModel,importModel);
+        ciModelAddOrModify(CiTypeDto.class, diffCiType.get("addOrModifyRs"));
+        ciTypeDelete(diffCiType.get("deleteRs"));
+
+    }
+    private void ciTypeDelete(List<CiTypeDto> ciTypes) {
+        ciTypes.forEach(ciType -> {
+            staticDtoService.delete(CiTypeDto.class, ciType.getCiTypeId());
+        });
+    }
+    private void ciTypeAttrDelete(List<CiTypeAttrDto> attrs) {
+        attrs.forEach(ciType -> {
+            staticDtoService.delete(CiTypeDto.class, ciType.getCiTypeId());
+        });
+    }
+
+    private <T extends ResourceDto<T, D>,D>void ciModelAddOrModify(Class<T> dtoClzz, List<T> importModel) {
+        List<Map<String,Object>> convertBeansToMaps = BeanMapUtils.convertBeansToMaps(importModel);
+        staticDtoService.create(dtoClzz, importModel,true,true);
+    }
+
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public <T> Map<String, List<T>> getDiffent(List<T> currentModel, List<T> importModel) {
+        List<T> addOrModifyRs = new LinkedList();
+        List<T> deleteRs = new LinkedList();
+        Map<String, List<T>> diffData = new HashMap<>();
+        diffData.put("addOrModifyRs", addOrModifyRs);
+        diffData.put("deleteRs", deleteRs);
+        MyMap<T, Integer> map = new MyMap<T, Integer>();
+        for (T object : currentModel) {
+            map.put(object, 1);
+        }
+        for (T key : importModel) {
+            if (map.containsKey(key)) {
+                map.remove(key);
+            } else {
+                addOrModifyRs.add(key);
+            }
+        }
+        deleteRs.addAll(map.keySet());
+        return diffData;
+    }
 }

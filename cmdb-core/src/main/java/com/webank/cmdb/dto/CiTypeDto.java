@@ -1,11 +1,5 @@
 package com.webank.cmdb.dto;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.google.common.base.MoreObjects;
@@ -14,6 +8,11 @@ import com.google.common.collect.Lists;
 import com.webank.cmdb.domain.AdmCiType;
 import com.webank.cmdb.util.DtoField;
 import com.webank.cmdb.util.DtoId;
+
+import javax.validation.constraints.NotNull;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 @JsonInclude(Include.NON_EMPTY)
 public class CiTypeDto extends BasicResourceDto<CiTypeDto, AdmCiType> {
@@ -150,8 +149,9 @@ public class CiTypeDto extends BasicResourceDto<CiTypeDto, AdmCiType> {
 
     public static CiTypeDto fromAdmCITypeWithAttr(AdmCiType admCiType) {
         CiTypeDto ciType = fromAdmCIType(admCiType);
-        if (ciType == null)
+        if (ciType == null) {
             return null;
+        }
 
         admCiType.getAdmCiTypeAttrs().forEach(x -> {
             ciType.attributes.add(CiTypeAttrDto.fromAdmCiTypeAttrs(x));
@@ -328,5 +328,118 @@ public class CiTypeDto extends BasicResourceDto<CiTypeDto, AdmCiType> {
                 .add("zoomLevelId", zoomLevelId)
                 .add("imageFileId", imageFileId)
                 .toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        CiTypeDto other = (CiTypeDto) obj;
+        if (catalogId == null) {
+            if (other.catalogId != null) {
+                return false;
+            }
+        } else if (!catalogId.equals(other.catalogId)) {
+            return false;
+        }
+        if (ciGlobalUniqueId == null) {
+            if (other.ciGlobalUniqueId != null) {
+                return false;
+            }
+        } else if (!ciGlobalUniqueId.equals(other.ciGlobalUniqueId)) {
+            return false;
+        }
+        if (ciStateType == null) {
+            if (other.ciStateType != null) {
+                return false;
+            }
+        } else if (!ciStateType.equals(other.ciStateType)) {
+            return false;
+        }
+        if (ciStateTypeId == null) {
+            if (other.ciStateTypeId != null) {
+                return false;
+            }
+        } else if (!ciStateTypeId.equals(other.ciStateTypeId)) {
+            return false;
+        }
+        if (description == null) {
+            if (other.description != null) {
+                return false;
+            }
+        } else if (!description.equals(other.description)) {
+            return false;
+        }
+        if (imageFileId == null) {
+            if (other.imageFileId != null) {
+                return false;
+            }
+        } else if (!imageFileId.equals(other.imageFileId)) {
+            return false;
+        }
+        if (layerCode == null) {
+            if (other.layerCode != null) {
+                return false;
+            }
+        } else if (!layerCode.equals(other.layerCode)) {
+            return false;
+        }
+        if (layerId == null) {
+            if (other.layerId != null) {
+                return false;
+            }
+        } else if (!layerId.equals(other.layerId)) {
+            return false;
+        }
+        if (name == null) {
+            if (other.name != null) {
+                return false;
+            }
+        } else if (!name.equals(other.name)) {
+            return false;
+        }
+        if (seqNo == null) {
+            if (other.seqNo != null) {
+                return false;
+            }
+        } else if (!seqNo.equals(other.seqNo)) {
+            return false;
+        }
+        if (status == null) {
+            if (other.status != null) {
+                return false;
+            }
+        } else if (!status.equals(other.status)) {
+            return false;
+        }
+        if (tableName == null) {
+            if (other.tableName != null) {
+                return false;
+            }
+        } else if (!tableName.equals(other.tableName)) {
+            return false;
+        }
+        if (tenementId == null) {
+            if (other.tenementId != null) {
+                return false;
+            }
+        } else if (!tenementId.equals(other.tenementId)) {
+            return false;
+        }
+        if (zoomLevelId == null) {
+            if (other.zoomLevelId != null) {
+                return false;
+            }
+        } else if (!zoomLevelId.equals(other.zoomLevelId)) {
+            return false;
+        }
+        return true;
     }
 }

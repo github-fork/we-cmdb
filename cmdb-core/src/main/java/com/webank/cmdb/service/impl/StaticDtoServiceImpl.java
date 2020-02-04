@@ -43,7 +43,6 @@ import com.webank.cmdb.util.QueryConverter;
 import com.webank.cmdb.util.ResourceDto;
 
 @Service
-@SuppressWarnings({ "unchecked", "rawtypes" })
 public class StaticDtoServiceImpl implements StaticDtoService {
 
     @Override
@@ -86,8 +85,10 @@ public class StaticDtoServiceImpl implements StaticDtoService {
         } else {// Cross resources query
             ResourceDto<T, D> resDto = getResDtoInstance(dtoClzz);
             Class<D> domainClzz = resDto.domainClazz();
-            FilterPath rootFilterPath = QueryConverter.convertFilter(dtoClzz, ciRequest.getRefResources(), ciRequest.getFilters());
-            QueryResponse<D> domainResponse = staticEntityRepository.<D>queryCrossRes(domainClzz, ciRequest, rootFilterPath);
+            FilterPath rootFilterPath = QueryConverter.convertFilter(dtoClzz, ciRequest.getRefResources(),
+                    ciRequest.getFilters());
+            QueryResponse<D> domainResponse = staticEntityRepository.<D>queryCrossRes(domainClzz, ciRequest,
+                    rootFilterPath);
             List<T> dtos = new LinkedList<>();
             domainResponse.getContents().forEach(x -> {
                 T dto = resDto.fromDomain(x, ciRequest.getRefResources());
@@ -135,8 +136,10 @@ public class StaticDtoServiceImpl implements StaticDtoService {
         filters.forEach(x -> {
             String dtoName = x.getName();
             String domainField = dtoToDomainFieldMap.get(dtoName);
-            if (Strings.isNullOrEmpty(domainField))
-                throw new InvalidArgumentException(String.format("Can not find out field [%s] for domain .", domainField));
+            if (Strings.isNullOrEmpty(domainField)) {
+                throw new InvalidArgumentException(
+                        String.format("Can not find out field [%s] for domain .", domainField));
+            }
             x.setName(domainField);
         });
     }
@@ -165,6 +168,13 @@ public class StaticDtoServiceImpl implements StaticDtoService {
     @Transactional
     @Override
     public <T extends ResourceDto<T, D>, D> List<T> create(Class<T> dtoClzz, List<T> dtoObjs) {
+        return create(dtoClzz, dtoObjs, false, false);
+    }
+
+    @OperationLogPointcut(operation = Creation)
+    @Transactional
+    @Override
+    public <T extends ResourceDto<T, D>, D> List<T> create(Class<T> dtoClzz, List<T> dtoObjs, boolean isNotCreateAttr, boolean isCustomGenerator) {
         if (logger.isDebugEnabled()) {
             logger.debug("Get create request, dtoClass:{}, objects:{}", dtoClzz, JsonUtil.toJson(dtoObjs));
         }
@@ -193,7 +203,8 @@ public class StaticDtoServiceImpl implements StaticDtoService {
                     if (value == null || value instanceof List) {
                         return;
                     }
-                    if (dtoIdField != null && dtoIdField.equals(name)) {
+
+                    if (dtoIdField != null && dtoIdField.equals(name) && !isNotCreateAttr && !isCustomGenerator) {
 
                         return;
                     }
@@ -203,12 +214,18 @@ public class StaticDtoServiceImpl implements StaticDtoService {
                     }
                 });
 
-                if (interceptor != null) {
+                if (interceptor != null && !isCustomGenerator) {
                     interceptor.preCreate(dtoObj, domainBean);
                 }
                 ;
-                D rtnDomainBean = staticEntityRepository.create(domainBean);
-                if (interceptor != null) {
+                D rtnDomainBean;
+                if(isCustomGenerator) {
+                    rtnDomainBean = staticEntityRepository.update(domainBean);
+                }else {
+
+                    rtnDomainBean = staticEntityRepository.create(domainBean);
+                }
+                if (interceptor != null && !isNotCreateAttr) {
                     interceptor.postCreate(dtoObj, domainBean);
                 }
                 ;
@@ -218,24 +235,28 @@ public class StaticDtoServiceImpl implements StaticDtoService {
                 rtnDtos.add(rtnDto);
             } catch (Exception e) {
                 logger.warn("Failed to create DTO resource.", e);
-                String errorMsg = String.format("Fail to create record with callbackId = [%s], error = [%s]", dtoObj.getCallbackId(), ExceptionHolder.extractExceptionMessage(e));
+                String errorMsg = String.format("Fail to create record with callbackId = [%s], error = [%s]",
+                        dtoObj.getCallbackId(), ExceptionHolder.extractExceptionMessage(e));
                 exceptionHolders.add(new ExceptionHolder(dtoObj.getCallbackId(), dtoObj, errorMsg, e));
                 continue;
             }
         }
 
         if (exceptionHolders.size() > 0) {
-            throw new BatchChangeException(String.format("Fail to create [%d] records, detail error in the data block", exceptionHolders.size()), exceptionHolders);
+            throw new BatchChangeException(String.format("Fail to create [%d] records, detail error in the data block",
+                    exceptionHolders.size()), exceptionHolders);
         }
         return rtnDtos;
     }
 
-    private void updateDomainField(final Map<String, String> dtoToDomainFieldMap, Class domainClzz, Map<String, Field> domainFieldMap, Map domainBeanMap, Object name, Object value) {
+    private void updateDomainField(final Map<String, String> dtoToDomainFieldMap, Class domainClzz,
+                                   Map<String, Field> domainFieldMap, Map domainBeanMap, Object name, Object value) {
         Object domainFieldName = dtoToDomainFieldMap.get(name);
         if (domainFieldName != null) {
             Field domainField = domainFieldMap.get(domainFieldName);
             if (domainField == null) {
-                throw new ServiceException(String.format("Can not find field [%s] for domain class [%s].", domainFieldName, domainClzz.toString()));
+                throw new ServiceException(String.format("Can not find field [%s] for domain class [%s].",
+                        domainFieldName, domainClzz.toString()));
             }
             if (value != null) {
                 value = convertToDomainValue(value, domainField);
@@ -299,7 +320,8 @@ public class StaticDtoServiceImpl implements StaticDtoService {
             if (domainField != null) {
                 domainVals.put(domainField, kv.getValue());
             } else {
-                throw new InvalidArgumentException(String.format("Can not map dto attribute [%s] to domain.", kv.getKey()));
+                throw new InvalidArgumentException(
+                        String.format("Can not map dto attribute [%s] to domain.", kv.getKey()));
             }
 
         }
@@ -358,14 +380,16 @@ public class StaticDtoServiceImpl implements StaticDtoService {
             } catch (Exception e) {
                 e.printStackTrace();
                 logger.warn(String.format("Error happened when updated DTO class [%s]", dtoClzz.toString()), e);
-                String errorMsg = String.format("Fail to update record with %s = [%s], error = [%s]", CALLBACK_ID, callbackId, ExceptionHolder.extractExceptionMessage(e));
+                String errorMsg = String.format("Fail to update record with %s = [%s], error = [%s]", CALLBACK_ID,
+                        callbackId, ExceptionHolder.extractExceptionMessage(e));
                 ExceptionHolders.add(new ExceptionHolder(callbackId, request, errorMsg, e));
                 continue;
             }
         }
 
         if (ExceptionHolders.size() > 0) {
-            throw new BatchChangeException(String.format("Fail to update [%s] records, detail error in the data block", ExceptionHolders.size()), ExceptionHolders);
+            throw new BatchChangeException(String.format("Fail to update [%s] records, detail error in the data block",
+                    ExceptionHolders.size()), ExceptionHolders);
         }
         return rtnDtos;
     }
@@ -390,7 +414,8 @@ public class StaticDtoServiceImpl implements StaticDtoService {
                 delete(dtoClzz, x);
             } catch (Exception e) {
                 logger.warn(String.format("Error happened when deleting DTO class [%s]", dtoClzz.toString()), e);
-                String errorMsg = String.format("Fail to delete record with id = [%d], error = [%s]", x, ExceptionHolder.extractExceptionMessage(e));
+                String errorMsg = String.format("Fail to delete record with id = [%d], error = [%s]", x,
+                        ExceptionHolder.extractExceptionMessage(e));
                 ExceptionHolders.add(new ExceptionHolder(String.valueOf(x), x, errorMsg, e));
             }
             if (interceptor != null) {
@@ -399,7 +424,8 @@ public class StaticDtoServiceImpl implements StaticDtoService {
         });
 
         if (ExceptionHolders.size() > 0) {
-            throw new BatchChangeException(String.format("Fail to delete [%s] records, detail error in the data block", ExceptionHolders.size()), ExceptionHolders);
+            throw new BatchChangeException(String.format("Fail to delete [%s] records, detail error in the data block",
+                    ExceptionHolders.size()), ExceptionHolders);
         }
 
     }

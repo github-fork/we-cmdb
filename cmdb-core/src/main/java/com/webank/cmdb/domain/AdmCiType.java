@@ -1,25 +1,13 @@
 package com.webank.cmdb.domain;
 
+import com.webank.cmdb.constant.CiStatus;
+import com.webank.cmdb.constant.InputType;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 import java.io.Serializable;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
-import com.webank.cmdb.constant.CiStatus;
-import com.webank.cmdb.constant.CmdbConstants;
-import com.webank.cmdb.constant.InputType;
 
 /**
  * The persistent class for the adm_ci_type database table.
@@ -53,8 +41,8 @@ public class AdmCiType implements Serializable {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_adm_ci_type")
+    @GeneratedValue(strategy = GenerationType.AUTO,generator = "CustomGenerator")
+    @GenericGenerator(name = "CustomGenerator", strategy = "com.webank.cmdb.util.CustomGenerator")    @Column(name = "id_adm_ci_type")
     public Integer getIdAdmCiType() {
         return this.idAdmCiType;
     }

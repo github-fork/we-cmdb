@@ -20,6 +20,8 @@ public interface StaticDtoService extends CmdbService {
 
     <T extends ResourceDto<T, D>, D> List<T> create(Class<T> dtoClazz, List<T> dtoObjs);
 
+    <T extends ResourceDto<T, D>, D> List<T> create(Class<T> dtoClzz, List<T> dtoObjs, boolean isNotCreateAttr, boolean isCustomGenerator);
+
     <T extends ResourceDto<T, D>, D> D update(Class<T> dtoClazz, int id, Map<String, Object> vals);
 
     <T extends ResourceDto<T, D>, D> List<T> update(Class<T> dtoClazz, List<Map<String, Object>> updateRequest);

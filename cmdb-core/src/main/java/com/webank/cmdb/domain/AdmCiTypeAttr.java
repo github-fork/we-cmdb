@@ -1,28 +1,17 @@
 package com.webank.cmdb.domain;
 
-import java.io.Serializable;
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.webank.cmdb.constant.CiStatus;
 import com.webank.cmdb.constant.CmdbConstants;
 import com.webank.cmdb.constant.InputType;
 import com.webank.cmdb.exception.ServiceException;
+import org.hibernate.annotations.GenericGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * The persistent class for the adm_ci_type_attr database table.
@@ -81,8 +70,8 @@ public class AdmCiTypeAttr implements Serializable {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_adm_ci_type_attr")
+    @GeneratedValue(generator = "CustomGenerator")
+    @GenericGenerator(name = "CustomGenerator", strategy = "com.webank.cmdb.util.CustomGenerator")    @Column(name = "id_adm_ci_type_attr")
     public Integer getIdAdmCiTypeAttr() {
         return this.idAdmCiTypeAttr;
     }
