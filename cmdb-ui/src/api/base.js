@@ -73,7 +73,8 @@ export const refreshToken = callback => {
     if (expiration < 1 * 60 * 1000 && !refreshRequest) {
       refreshRequest = axios.get('/auth/v1/api/token', {
         headers: {
-          Authorization: 'Bearer ' + token.find(t => t.tokenType === 'refreshToken').token
+          Authorization:
+            'Bearer ' + token.find(t => t.tokenType === 'refreshToken').token
         }
       })
       refreshRequest.then(
@@ -102,9 +103,14 @@ const sendHttpRequest = (url, callback) => {
   const session = window.sessionStorage
   const token = JSON.parse(session.getItem('token'))
   const accessToken =
-    token && token.find(t => t.tokenType === 'accessToken') ? token.find(t => t.tokenType === 'accessToken').token : ''
+    token && token.find(t => t.tokenType === 'accessToken')
+      ? token.find(t => t.tokenType === 'accessToken').token
+      : ''
   if (accessToken) {
-    xhr.setRequestHeader('Authorization', 'Bearer ' + token.find(t => t.tokenType === 'accessToken').token)
+    xhr.setRequestHeader(
+      'Authorization',
+      'Bearer ' + token.find(t => t.tokenType === 'accessToken').token
+    )
   }
   // 设置响应类型为 blob
   xhr.responseType = 'blob'
