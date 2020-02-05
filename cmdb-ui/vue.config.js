@@ -27,6 +27,9 @@ module.exports = {
       },
       '/batch-job': {
         target: baseUrl
+      },
+      '/model': {
+        target: baseUrl
       }
     }
   },

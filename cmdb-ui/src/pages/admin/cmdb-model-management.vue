@@ -4,7 +4,7 @@
       <div style="padding-right: 20px">
         <Card style="height: calc(100vh - 108px);">
           <Row slot="title">
-            <Col span="10">
+            <Col span="8">
               <p>
                 {{ $t('architecture_diagram') }}
                 <span class="header-buttons-container margin-left">
@@ -14,7 +14,7 @@
                 </span>
               </p>
             </Col>
-            <Col span="13" offset="1">
+            <Col span="9" offset="1">
               <span class="filter-title">{{ $t('state') }}</span>
               <Select
                 multiple
@@ -27,6 +27,10 @@
                   {{ item }}
                 </Option>
               </Select>
+            </Col>
+            <Col span="6">
+              <CMDBUpload class="float-right">{{ $t('import') }}</CMDBUpload>
+              <Download class="float-right" :href="`${baseURL}/model/export`">{{ $t('export') }}</Download>
             </Col>
           </Row>
           <div class="graph-container" id="graph"></div>
@@ -718,6 +722,8 @@ import { setHeaders, baseURL } from '@/api/base.js'
 import enumGroupModal from './components/enum-group-modal'
 import AutoFill from '../components/auto-fill.js'
 import FilterRule from '../components/filter-rule'
+import Download from '../components/download'
+import CMDBUpload from '../components/cmdb-upload'
 
 const defaultCiTypePNG = require('@/assets/ci-type-default.png')
 
@@ -725,11 +731,15 @@ export default {
   components: {
     enumGroupModal,
     AutoFill,
-    FilterRule
+    FilterRule,
+    Download,
+    CMDBUpload
   },
   data () {
     return {
       baseURL,
+      exportLoading: false,
+      headers: {},
       imgs: new Array(26),
       source: {},
       layers: [],
@@ -1582,14 +1592,6 @@ export default {
     this.getTableStatusList()
     this.getAllCiTypeWithAttr()
     this.getSpecialConnector()
-  },
-  computed: {
-    setUploadActionHeader () {
-      let uploadToken = document.cookie.split(';').find(i => i.indexOf('XSRF-TOKEN') !== -1)
-      return {
-        'X-XSRF-TOKEN': uploadToken && uploadToken.split('=')[1]
-      }
-    }
   }
 }
 </script>
@@ -1648,5 +1650,9 @@ export default {
   .header-buttons-container {
     float: right;
   }
+}
+.float-right {
+  float: right;
+  margin-left: 10px;
 }
 </style>
