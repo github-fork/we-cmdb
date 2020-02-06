@@ -4,10 +4,10 @@
       <slot></slot>
     </Button>
     <Upload
-      accept=".json"
-      :action="`${baseURL}/model/showDifferences`"
+      :accept="fileTypes"
+      :action="href"
       :headers="headers"
-      name="uploadFile"
+      name="file"
       :on-error="error"
       :on-success="success"
       ref="uploadButton"
@@ -21,10 +21,16 @@
 <script>
 import { baseURL, refreshToken } from '@/api/base.js'
 export default {
-  // props: {
-  //   fileTypes: '.zip',
-  //   href: ''
-  // },
+  props: {
+    fileTypes: {
+      default: '.zip',
+      required: false
+    },
+    href: {
+      default: '',
+      required: true
+    }
+  },
   data () {
     return {
       headers: {},
@@ -38,7 +44,8 @@ export default {
           let session = window.sessionStorage
           const token = JSON.parse(session.getItem('token'))
           this.headers = {
-            Authorization: 'Bearer ' + token.find(t => t.tokenType === 'accessToken').token
+            Authorization:
+              'Bearer ' + token.find(t => t.tokenType === 'accessToken').token
           }
           this.$refs.uploadButton.handleClick()
         })

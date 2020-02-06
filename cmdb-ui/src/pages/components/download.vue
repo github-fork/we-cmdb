@@ -1,5 +1,10 @@
 <template>
-  <Button type="primary" @click="exportModel" class="float-right" :loading="loading">
+  <Button
+    type="primary"
+    @click="exportModel"
+    class="float-right"
+    :loading="loading"
+  >
     <slot></slot>
   </Button>
 </template>
@@ -8,7 +13,10 @@
 import { downLoadByUrl } from '@/api/base.js'
 export default {
   props: {
-    href: ''
+    href: {
+      default: '',
+      required: true
+    }
   },
   data () {
     return {
