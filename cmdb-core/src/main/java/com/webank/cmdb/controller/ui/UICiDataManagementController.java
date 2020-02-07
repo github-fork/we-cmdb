@@ -11,6 +11,7 @@ import static com.webank.cmdb.domain.AdmMenu.MENU_DESIGNING_CI_INTEGRATED_QUERY_
 import static com.webank.cmdb.domain.AdmMenu.MENU_IDC_PLANNING_DESIGN;
 import static com.webank.cmdb.domain.AdmMenu.MENU_IDC_RESOURCE_PLANNING;
 import static com.webank.cmdb.dto.QueryRequest.defaultQueryObject;
+import static com.webank.cmdb.dto.ResponseDto.STATUS_OK;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 import java.io.BufferedOutputStream;
@@ -456,7 +457,7 @@ public class UICiDataManagementController {
             buff.write(json.getBytes("UTF-8"));
             buff.flush();
         } catch (Exception e) {
-            //LOGGER.error("导出文件文件出错:{}",e);
+            log.error("File export error:{}",e);
         }
     }
 
@@ -470,7 +471,7 @@ public class UICiDataManagementController {
         modelData.put("currentModel", currentModel.getContents());
         modelData.put("importModel", importModel);
         ResponseDto<Map<String,List<CiTypeDto>>> responseDto = new ResponseDto<>();
-        responseDto.setStatusCode("200");
+        responseDto.setStatusCode(STATUS_OK);
         responseDto.setData(modelData);
         return responseDto;
     }

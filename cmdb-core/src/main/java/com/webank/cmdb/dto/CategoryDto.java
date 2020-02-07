@@ -160,4 +160,34 @@ public class CategoryDto extends BasicResourceDto<CategoryDto, AdmBasekeyCat> {
     public String toString() {
         return MoreObjects.toStringHelper(this).add("catId", catId).add("catName", catName).add("description", description).add("groupTypeId", groupTypeId).add("catTypeId", catTypeId).add("codes", codes).toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        CategoryDto that = (CategoryDto) o;
+        if (catId != null ? !catId.equals(that.catId) : that.catId != null) {
+            return false;
+        }
+        if (catName != null ? !catName.equals(that.catName) : that.catName != null) {
+            return false;
+        }
+        if (description != null ? !description.equals(that.description) : that.description != null) {
+            return false;
+        }
+        if (groupTypeId != null ? !groupTypeId.equals(that.groupTypeId) : that.groupTypeId != null) {
+            return false;
+        }
+        if (catTypeId != null ? !catTypeId.equals(that.catTypeId) : that.catTypeId != null) {
+            return false;
+        }
+        if (catType != null ? !catType.equals(that.catType) : that.catType != null) {
+            return false;
+        }
+        return codes != null ? codes.equals(that.codes) : that.codes == null;
+    }
 }

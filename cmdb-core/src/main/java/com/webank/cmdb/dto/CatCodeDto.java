@@ -204,4 +204,48 @@ public class CatCodeDto extends BasicResourceDto<CatCodeDto, AdmBasekeyCode> {
     public void setCiTypes(List<CiTypeDto> ciTypes) {
         this.ciTypes = ciTypes;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        CatCodeDto that = (CatCodeDto) o;
+
+        if (code != null ? !code.equals(that.code) : that.code != null) {
+            return false;
+        }
+        if (value != null ? !value.equals(that.value) : that.value != null) {
+            return false;
+        }
+        if (seqNo != null ? !seqNo.equals(that.seqNo) : that.seqNo != null) {
+            return false;
+        }
+        if (codeId != null ? !codeId.equals(that.codeId) : that.codeId != null) {
+            return false;
+        }
+        if (codeDescription != null ? !codeDescription.equals(that.codeDescription) : that.codeDescription != null) {
+            return false;
+        }
+        if (groupCodeId != null ? !groupCodeId.equals(that.groupCodeId) : that.groupCodeId != null) {
+            return false;
+        }
+        if (groupName != null ? !groupName.equals(that.groupName) : that.groupName != null) {
+            return false;
+        }
+        if (catId != null ? !catId.equals(that.catId) : that.catId != null) {
+            return false;
+        }
+        if (cat != null ? !cat.equals(that.cat) : that.cat != null) {
+            return false;
+        }
+        if (status != null ? !status.equals(that.status) : that.status != null) {
+            return false;
+        }
+        return ciTypes != null ? ciTypes.equals(that.ciTypes) : that.ciTypes == null;
+    }
 }

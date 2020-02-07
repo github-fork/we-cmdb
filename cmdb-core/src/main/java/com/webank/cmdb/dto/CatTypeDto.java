@@ -132,4 +132,34 @@ public class CatTypeDto extends BasicResourceDto<CatTypeDto, AdmBasekeyCatType> 
     public String toString() {
         return MoreObjects.toStringHelper(this).add("catTypeId", catTypeId).add("catTypeName", catTypeName).add("ciTypeId", ciTypeId).add("type", type).add("description", description).add("cats", cats).toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        CatTypeDto that = (CatTypeDto) o;
+
+        if (catTypeId != null ? !catTypeId.equals(that.catTypeId) : that.catTypeId != null) {
+            return false;
+        }
+        if (catTypeName != null ? !catTypeName.equals(that.catTypeName) : that.catTypeName != null) {
+            return false;
+        }
+        if (ciTypeId != null ? !ciTypeId.equals(that.ciTypeId) : that.ciTypeId != null) {
+            return false;
+        }
+        if (type != null ? !type.equals(that.type) : that.type != null) {
+            return false;
+        }
+        if (description != null ? !description.equals(that.description) : that.description != null) {
+            return false;
+        }
+        return cats != null ? cats.equals(that.cats) : that.cats == null;
+    }
+
 }

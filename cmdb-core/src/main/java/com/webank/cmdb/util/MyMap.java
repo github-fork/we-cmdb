@@ -1,6 +1,8 @@
 package com.webank.cmdb.util;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -29,12 +31,12 @@ public class MyMap<K,V> extends HashMap<K, V> {
     public V get(Object key) {
         return map.get(key);
     }
-    @Override
-    public boolean containsKey(Object key) {
+
+    public <K> boolean myContainsKey(K key) {
         if(key == null){
             return false;
         }
-        Set<K> keySet = map.keySet();
+        Set<K> keySet = (Set<K>) map.keySet();
         for (K k : keySet) {
             if(key.equals(k)) {
                 return true;
@@ -44,12 +46,18 @@ public class MyMap<K,V> extends HashMap<K, V> {
     }
     @Override
     public V remove(Object key) {
-        Set<K> keySet = map.keySet();
-        for (K k : keySet) {
-            if(key.equals(k)) {
-                map.remove(k);
+        Iterator<K> iterator = map.keySet().iterator();
+        while (iterator.hasNext()) {
+            K k = iterator.next();
+            if (key.equals(k)) {
+                iterator.remove();
             }
         }
         return null;
+    }
+
+    @Override
+    public Set<K> keySet(){
+        return map.keySet();
     }
 }

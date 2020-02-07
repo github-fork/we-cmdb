@@ -1692,7 +1692,7 @@ public class UIWrapperService {
     }
 
     public List<CiTypeDto> importModel(MultipartFile file) {
-        try (BufferedReader br = new BufferedReader((new InputStreamReader(file.getInputStream(), "utf-8")))) {
+        try (BufferedReader br = new BufferedReader((new InputStreamReader(file.getInputStream())))) {
             String line;
             StringBuffer sb = new StringBuffer();
             try {
@@ -1765,7 +1765,7 @@ public class UIWrapperService {
             map.put(object, 1);
         }
         for (T key : importModel) {
-            if (map.containsKey(key)) {
+            if (map.myContainsKey(key)) {
                 map.remove(key);
             } else {
                 addOrModifyRs.add(key);
