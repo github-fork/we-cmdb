@@ -33,15 +33,32 @@
               </Select>
             </Col>
             <Col span="6">
-              <CMDBUpload
-                class="float-right"
-                :href="`${baseURL}/model/showDifferences`"
-                fileTypes=".json"
-                >{{ $t('import') }}</CMDBUpload
+              <Download class="float-right" :href="`${baseURL}/model/export`">
+                {{ $t('export') }}
+              </Download>
+              <Button class="float-right" type="primary" @click="uploadModel">{{
+                $t('import')
+              }}</Button>
+              <Modal
+                v-model="uploadModelVisible"
+                :title="$t('import_model')"
+                :mask-closable="false"
               >
-              <Download class="float-right" :href="`${baseURL}/model/export`">{{
-                $t('export')
-              }}</Download>
+                <UploadModal
+                  v-if="uploadModelVisible"
+                  @readyToImport="readyToImport"
+                  @updataImportModelData="updataImportModelData"
+                />
+                <template class="float-right" slot="footer">
+                  <Button
+                    :loading="ImportButtonLoading"
+                    type="primary"
+                    @click="importModel"
+                    >{{ $t('confirm') }}</Button
+                  >
+                  <Button @click="closeUploadModal">{{ $t('cancel') }}</Button>
+                </template>
+              </Modal>
             </Col>
           </Row>
           <div class="graph-container" id="graph"></div>
@@ -1032,7 +1049,8 @@ import {
   implementCiType,
   implementCiAttr,
   getEnumCategoriesByTypeId,
-  getSpecialConnector
+  getSpecialConnector,
+  applyModel
 } from '@/api/server'
 import STATUS_LIST from '@/const/graph-status-list.js'
 import { PROPERTY_TYPE_MAP } from '@/const/data-types.js'
@@ -1042,6 +1060,7 @@ import AutoFill from '../components/auto-fill.js'
 import FilterRule from '../components/filter-rule'
 import Download from '../components/download'
 import CMDBUpload from '../components/cmdb-upload'
+import UploadModal from '../components/upload-model'
 
 const defaultCiTypePNG = require('@/assets/ci-type-default.png')
 
@@ -1051,13 +1070,15 @@ export default {
     AutoFill,
     FilterRule,
     Download,
-    CMDBUpload
+    CMDBUpload,
+    UploadModal
   },
   data () {
     return {
       baseURL,
-      exportLoading: false,
-      headers: {},
+      uploadModelVisible: false,
+      ImportButtonLoading: true,
+      importModelData: [],
       imgs: new Array(26),
       source: {},
       layers: [],
@@ -1961,6 +1982,31 @@ export default {
       this.currentSelectedCI = {}
       this.getAllCITypesList()
       this.initGraph()
+    },
+    uploadModel () {
+      this.ImportButtonLoading = true
+      this.uploadModelVisible = true
+    },
+    readyToImport () {
+      this.ImportButtonLoading = false
+    },
+    updataImportModelData (data) {
+      this.importModelData = data
+    },
+    async importModel () {
+      this.ImportButtonLoading = true
+      const { statusCode } = await applyModel(this.importModelData)
+      if (statusCode === 'OK') {
+        this.uploadModelVisible = false
+        this.$Notice.success({
+          title: this.$t('import_model_success')
+        })
+      }
+      this.ImportButtonLoading = false
+    },
+    closeUploadModal () {
+      this.importModelData = []
+      this.uploadModelVisible = false
     }
   },
   mounted () {

@@ -1,19 +1,22 @@
 <template>
   <div class="cmdb-upload">
-    <Button type="primary" @click="uploadFile">
+    <Button type="primary" @click="uploadFile" v-show="showButton">
       <slot></slot>
     </Button>
     <Upload
       :accept="fileTypes"
       :action="href"
+      :autoUpload="autoUpload"
       :headers="headers"
       name="file"
-      :on-error="error"
-      :on-success="success"
+      :on-error="onError"
+      :on-progress="onProgress"
+      :on-success="onSuccess"
       ref="uploadButton"
+      :showButton="showButton"
       show-upload-list
     >
-      <Button style="display:none"></Button>
+      <slot name="uploadTitle"></slot>
     </Upload>
   </div>
 </template>
@@ -22,6 +25,10 @@
 import { baseURL, refreshToken } from '@/api/base.js'
 export default {
   props: {
+    autoUpload: {
+      default: false,
+      required: false
+    },
     fileTypes: {
       default: '.zip',
       required: false
@@ -29,6 +36,22 @@ export default {
     href: {
       default: '',
       required: true
+    },
+    showButton: {
+      default: true,
+      required: false
+    },
+    onError: {
+      type: Function,
+      required: false
+    },
+    onProgress: {
+      type: Function,
+      required: false
+    },
+    onSuccess: {
+      type: Function,
+      required: false
     }
   },
   data () {
@@ -52,9 +75,10 @@ export default {
       } else {
         this.$refs.uploadButton.handleClick()
       }
-    },
-    error () {},
-    success () {}
+    }
+  },
+  mounted () {
+    this.autoUpload && this.uploadFile()
   }
 }
 </script>
