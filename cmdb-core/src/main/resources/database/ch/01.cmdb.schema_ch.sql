@@ -1,28 +1,89 @@
--- --------------------------------------------------------
--- 主机:                           
--- 服务器版本:                        5.6.46 - MySQL Community Server (GPL)
--- 服务器操作系统:                      Linux
--- HeidiSQL 版本:                  9.5.0.5196
--- --------------------------------------------------------
+/*
+Navicat MySQL Data Transfer
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
-/*!50503 SET NAMES utf8mb4 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+Source Server         : localhost
+Source Server Version : 50562
+Source Host           : localhost:3306
+Source Database       : test
+
+Target Server Type    : MYSQL
+Target Server Version : 50562
+File Encoding         : 65001
+
+Date: 2020-02-10 19:16:13
+*/
 
 SET FOREIGN_KEY_CHECKS=0;
 
--- 导出  表 wecmdb_embedded.adm_attr_group 结构
-CREATE TABLE IF NOT EXISTS `adm_attr_group` (
+-- ----------------------------
+-- Table structure for adm_attr_group
+-- ----------------------------
+DROP TABLE IF EXISTS `adm_attr_group`;
+CREATE TABLE `adm_attr_group` (
   `id_adm_attr_group` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id_adm_attr_group',
   `name` varchar(64) DEFAULT NULL COMMENT '组名',
   PRIMARY KEY (`id_adm_attr_group`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.adm_ci_type 结构
-CREATE TABLE IF NOT EXISTS `adm_ci_type` (
+-- ----------------------------
+-- Table structure for adm_basekey_cat
+-- ----------------------------
+DROP TABLE IF EXISTS `adm_basekey_cat`;
+CREATE TABLE `adm_basekey_cat` (
+  `id_adm_basekey_cat` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id_adm_basekey_cat',
+  `cat_name` varchar(32) DEFAULT NULL COMMENT '类别名称',
+  `description` varchar(255) DEFAULT NULL COMMENT '描述',
+  `id_adm_role` int(11) DEFAULT NULL COMMENT 'id_adm_role',
+  `id_adm_basekey_cat_type` int(11) DEFAULT NULL COMMENT '类型',
+  `group_type_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_adm_basekey_cat`),
+  KEY `fk_adm_basekey_cat_adm_role_1` (`id_adm_role`),
+  KEY `fk_adm_basekey_cat_type` (`id_adm_basekey_cat_type`),
+  KEY `fk_adm_basekey_group_type_id` (`group_type_id`),
+  CONSTRAINT `fk_adm_basekey_cat_type` FOREIGN KEY (`id_adm_basekey_cat_type`) REFERENCES `adm_basekey_cat_type` (`id_adm_basekey_cat_type`),
+  CONSTRAINT `fk_adm_basekey_group_type_id` FOREIGN KEY (`group_type_id`) REFERENCES `adm_basekey_cat` (`id_adm_basekey_cat`)
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for adm_basekey_cat_type
+-- ----------------------------
+DROP TABLE IF EXISTS `adm_basekey_cat_type`;
+CREATE TABLE `adm_basekey_cat_type` (
+  `id_adm_basekey_cat_type` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(25) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `ci_type_id` int(11) DEFAULT NULL,
+  `type` int(4) DEFAULT NULL,
+  PRIMARY KEY (`id_adm_basekey_cat_type`),
+  KEY `adm_basekey_cat_type_ci_type_1` (`ci_type_id`),
+  CONSTRAINT `adm_basekey_cat_type_ci_type_1` FOREIGN KEY (`ci_type_id`) REFERENCES `adm_ci_type` (`id_adm_ci_type`)
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for adm_basekey_code
+-- ----------------------------
+DROP TABLE IF EXISTS `adm_basekey_code`;
+CREATE TABLE `adm_basekey_code` (
+  `id_adm_basekey` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id_adm_basekey',
+  `id_adm_basekey_cat` int(11) DEFAULT NULL COMMENT 'id_adm_basekey_cat',
+  `code` varchar(255) DEFAULT NULL COMMENT 'key',
+  `value` varchar(2000) DEFAULT NULL COMMENT 'name',
+  `group_code_id` int(11) DEFAULT NULL COMMENT 'the group code it belong to',
+  `code_description` varchar(255) DEFAULT NULL COMMENT '编码描述',
+  `seq_no` int(11) DEFAULT NULL COMMENT '排序序号',
+  `status` varchar(20) DEFAULT 'active' COMMENT '枚举状态',
+  PRIMARY KEY (`id_adm_basekey`),
+  KEY `fk_adm_basekey_code_adm_basekey_cat_1` (`id_adm_basekey_cat`),
+  KEY `fk_adm_basekey_code_group_code_id` (`group_code_id`),
+  CONSTRAINT `fk_adm_basekey_code_adm_basekey_cat_1` FOREIGN KEY (`id_adm_basekey_cat`) REFERENCES `adm_basekey_cat` (`id_adm_basekey_cat`),
+  CONSTRAINT `fk_adm_basekey_code_group_code_id` FOREIGN KEY (`group_code_id`) REFERENCES `adm_basekey_code` (`id_adm_basekey`)
+) ENGINE=InnoDB AUTO_INCREMENT=392 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for adm_ci_type
+-- ----------------------------
+DROP TABLE IF EXISTS `adm_ci_type`;
+CREATE TABLE `adm_ci_type` (
   `id_adm_ci_type` int(4) NOT NULL AUTO_INCREMENT COMMENT 'id_adm_ci_type',
   `name` varchar(32) DEFAULT NULL COMMENT 'ci类型中文名称',
   `description` varchar(255) DEFAULT NULL COMMENT '描述',
@@ -41,57 +102,11 @@ CREATE TABLE IF NOT EXISTS `adm_ci_type` (
   KEY `fk_adm_ci_type_adm_ci_type_1` (`catalog_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.adm_basekey_cat_type 结构
-CREATE TABLE IF NOT EXISTS `adm_basekey_cat_type` (
-  `id_adm_basekey_cat_type` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(25) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `ci_type_id` int(11) DEFAULT NULL,
-  `type` int(4) DEFAULT NULL,
-  PRIMARY KEY (`id_adm_basekey_cat_type`),
-  KEY `adm_basekey_cat_type_ci_type_1` (`ci_type_id`),
-  CONSTRAINT `adm_basekey_cat_type_ci_type_1` FOREIGN KEY (`ci_type_id`) REFERENCES `adm_ci_type` (`id_adm_ci_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
-
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.adm_basekey_cat 结构
-CREATE TABLE IF NOT EXISTS `adm_basekey_cat` (
-  `id_adm_basekey_cat` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id_adm_basekey_cat',
-  `cat_name` varchar(32) DEFAULT NULL COMMENT '类别名称',
-  `description` varchar(255) DEFAULT NULL COMMENT '描述',
-  `id_adm_role` int(11) DEFAULT NULL COMMENT 'id_adm_role',
-  `id_adm_basekey_cat_type` int(11) DEFAULT NULL COMMENT '类型',
-  `group_type_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id_adm_basekey_cat`),
-  KEY `fk_adm_basekey_cat_adm_role_1` (`id_adm_role`),
-  KEY `fk_adm_basekey_cat_type` (`id_adm_basekey_cat_type`),
-  KEY `fk_adm_basekey_group_type_id` (`group_type_id`),
-  CONSTRAINT `fk_adm_basekey_cat_type` FOREIGN KEY (`id_adm_basekey_cat_type`) REFERENCES `adm_basekey_cat_type` (`id_adm_basekey_cat_type`),
-  CONSTRAINT `fk_adm_basekey_group_type_id` FOREIGN KEY (`group_type_id`) REFERENCES `adm_basekey_cat` (`id_adm_basekey_cat`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
-
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.adm_basekey_code 结构
-CREATE TABLE IF NOT EXISTS `adm_basekey_code` (
-  `id_adm_basekey` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id_adm_basekey',
-  `id_adm_basekey_cat` int(11) DEFAULT NULL COMMENT 'id_adm_basekey_cat',
-  `code` varchar(255) DEFAULT NULL COMMENT 'key',
-  `value` varchar(2000) DEFAULT NULL COMMENT 'name',
-  `group_code_id` int(11) DEFAULT NULL COMMENT 'the group code it belong to',
-  `code_description` varchar(255) DEFAULT NULL COMMENT '编码描述',
-  `seq_no` int(11) DEFAULT NULL COMMENT '排序序号',
-  `status` varchar(20) DEFAULT 'active' COMMENT '枚举状态',
-  PRIMARY KEY (`id_adm_basekey`),
-  KEY `fk_adm_basekey_code_adm_basekey_cat_1` (`id_adm_basekey_cat`),
-  KEY `fk_adm_basekey_code_group_code_id` (`group_code_id`),
-  CONSTRAINT `fk_adm_basekey_code_adm_basekey_cat_1` FOREIGN KEY (`id_adm_basekey_cat`) REFERENCES `adm_basekey_cat` (`id_adm_basekey_cat`),
-  CONSTRAINT `fk_adm_basekey_code_group_code_id` FOREIGN KEY (`group_code_id`) REFERENCES `adm_basekey_code` (`id_adm_basekey`)
-) ENGINE=InnoDB AUTO_INCREMENT=392 DEFAULT CHARSET=utf8;
-
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.adm_ci_type_attr 结构
-CREATE TABLE IF NOT EXISTS `adm_ci_type_attr` (
+-- ----------------------------
+-- Table structure for adm_ci_type_attr
+-- ----------------------------
+DROP TABLE IF EXISTS `adm_ci_type_attr`;
+CREATE TABLE `adm_ci_type_attr` (
   `id_adm_ci_type_attr` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id_adm_ci_type_attr',
   `id_adm_ci_type` int(4) NOT NULL COMMENT 'id_adm_ci_type',
   `name` varchar(64) NOT NULL COMMENT 'CI类型属性中文名',
@@ -103,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `adm_ci_type_attr` (
   `reference_id` int(11) DEFAULT NULL COMMENT '引用ID',
   `reference_name` varchar(64) DEFAULT NULL COMMENT '引用命名',
   `reference_type` int(4) DEFAULT NULL COMMENT '引用类型',
-  `filter_rule` varchar(4000) DEFAULT NULL,
+  `filter_rule` varchar(1000) DEFAULT NULL,
   `search_seq_no` int(11) DEFAULT NULL COMMENT '搜索条件排序序号',
   `display_type` int(1) DEFAULT NULL COMMENT '展示类型',
   `display_seq_no` int(11) DEFAULT NULL COMMENT '展示排序',
@@ -124,9 +139,11 @@ CREATE TABLE IF NOT EXISTS `adm_ci_type_attr` (
   UNIQUE KEY `uniqCiType` (`id_adm_ci_type`,`property_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1025 DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.adm_ci_type_attr_base 结构
-CREATE TABLE IF NOT EXISTS `adm_ci_type_attr_base` (
+-- ----------------------------
+-- Table structure for adm_ci_type_attr_base
+-- ----------------------------
+DROP TABLE IF EXISTS `adm_ci_type_attr_base`;
+CREATE TABLE `adm_ci_type_attr_base` (
   `id_adm_ci_type_attr` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id_adm_ci_type_attr',
   `id_adm_ci_type` int(4) NOT NULL COMMENT 'id_adm_ci_type',
   `name` varchar(64) NOT NULL COMMENT 'CI类型属性中文名',
@@ -158,9 +175,11 @@ CREATE TABLE IF NOT EXISTS `adm_ci_type_attr_base` (
   PRIMARY KEY (`id_adm_ci_type_attr`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.adm_ci_type_attr_group 结构
-CREATE TABLE IF NOT EXISTS `adm_ci_type_attr_group` (
+-- ----------------------------
+-- Table structure for adm_ci_type_attr_group
+-- ----------------------------
+DROP TABLE IF EXISTS `adm_ci_type_attr_group`;
+CREATE TABLE `adm_ci_type_attr_group` (
   `id_adm_ci_type_attr_group` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id_adm_ci_type_attr_group',
   `id_adm_ci_type_attr` int(11) DEFAULT NULL COMMENT 'id_adm_ci_type_attr',
   `id_adm_attr_group` int(11) DEFAULT NULL COMMENT 'id_adm_attr_group',
@@ -171,9 +190,11 @@ CREATE TABLE IF NOT EXISTS `adm_ci_type_attr_group` (
   CONSTRAINT `fk_adm_ci_type_attr_group_adm_ci_type_attr_1` FOREIGN KEY (`id_adm_ci_type_attr`) REFERENCES `adm_ci_type_attr` (`id_adm_ci_type_attr`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.adm_files 结构
-CREATE TABLE IF NOT EXISTS `adm_files` (
+-- ----------------------------
+-- Table structure for adm_files
+-- ----------------------------
+DROP TABLE IF EXISTS `adm_files`;
+CREATE TABLE `adm_files` (
   `id_adm_file` int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(32) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
@@ -181,9 +202,11 @@ CREATE TABLE IF NOT EXISTS `adm_files` (
   PRIMARY KEY (`id_adm_file`)
 ) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.adm_integrate_template 结构
-CREATE TABLE IF NOT EXISTS `adm_integrate_template` (
+-- ----------------------------
+-- Table structure for adm_integrate_template
+-- ----------------------------
+DROP TABLE IF EXISTS `adm_integrate_template`;
+CREATE TABLE `adm_integrate_template` (
   `id_adm_integrate_template` int(11) NOT NULL AUTO_INCREMENT,
   `ci_type_id` int(11) NOT NULL,
   `name` varchar(64) DEFAULT NULL,
@@ -191,9 +214,11 @@ CREATE TABLE IF NOT EXISTS `adm_integrate_template` (
   PRIMARY KEY (`id_adm_integrate_template`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.adm_integrate_template_alias 结构
-CREATE TABLE IF NOT EXISTS `adm_integrate_template_alias` (
+-- ----------------------------
+-- Table structure for adm_integrate_template_alias
+-- ----------------------------
+DROP TABLE IF EXISTS `adm_integrate_template_alias`;
+CREATE TABLE `adm_integrate_template_alias` (
   `id_alias` int(11) NOT NULL AUTO_INCREMENT,
   `id_adm_ci_type` int(11) DEFAULT NULL,
   `id_adm_integrate_template` int(11) DEFAULT NULL,
@@ -205,9 +230,11 @@ CREATE TABLE IF NOT EXISTS `adm_integrate_template_alias` (
   CONSTRAINT `fk_adm_integrate_template_alias_adm_integrate_template_1` FOREIGN KEY (`id_adm_integrate_template`) REFERENCES `adm_integrate_template` (`id_adm_integrate_template`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.adm_integrate_template_alias_attr 结构
-CREATE TABLE IF NOT EXISTS `adm_integrate_template_alias_attr` (
+-- ----------------------------
+-- Table structure for adm_integrate_template_alias_attr
+-- ----------------------------
+DROP TABLE IF EXISTS `adm_integrate_template_alias_attr`;
+CREATE TABLE `adm_integrate_template_alias_attr` (
   `id_attr` int(11) NOT NULL AUTO_INCREMENT,
   `id_alias` int(11) DEFAULT NULL,
   `id_ci_type_attr` int(11) DEFAULT NULL,
@@ -226,9 +253,11 @@ CREATE TABLE IF NOT EXISTS `adm_integrate_template_alias_attr` (
   CONSTRAINT `fk_adm_integrate_template_alias_attr_2` FOREIGN KEY (`id_ci_type_attr`) REFERENCES `adm_ci_type_attr` (`id_adm_ci_type_attr`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.adm_integrate_template_relation 结构
-CREATE TABLE IF NOT EXISTS `adm_integrate_template_relation` (
+-- ----------------------------
+-- Table structure for adm_integrate_template_relation
+-- ----------------------------
+DROP TABLE IF EXISTS `adm_integrate_template_relation`;
+CREATE TABLE `adm_integrate_template_relation` (
   `id_relation` int(11) NOT NULL AUTO_INCREMENT,
   `child_alias_id` int(11) DEFAULT NULL,
   `child_ref_attr_id` int(11) DEFAULT NULL,
@@ -243,9 +272,11 @@ CREATE TABLE IF NOT EXISTS `adm_integrate_template_relation` (
   CONSTRAINT `fk_adm_integrate_template_relation_attr_1` FOREIGN KEY (`child_ref_attr_id`) REFERENCES `adm_ci_type_attr` (`id_adm_ci_type_attr`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.adm_log 结构
-CREATE TABLE IF NOT EXISTS `adm_log` (
+-- ----------------------------
+-- Table structure for adm_log
+-- ----------------------------
+DROP TABLE IF EXISTS `adm_log`;
+CREATE TABLE `adm_log` (
   `id_log` int(11) DEFAULT NULL,
   `log_cat` varchar(50) DEFAULT NULL,
   `id_adm_user` varchar(20) DEFAULT NULL,
@@ -269,11 +300,13 @@ CREATE TABLE IF NOT EXISTS `adm_log` (
   KEY `NewIndex1` (`log_cat`),
   KEY `NewIndex2` (`ci_type_name`),
   KEY `NewIndex3` (`ci_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=5875 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6071 DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.adm_menu 结构
-CREATE TABLE IF NOT EXISTS `adm_menu` (
+-- ----------------------------
+-- Table structure for adm_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `adm_menu`;
+CREATE TABLE `adm_menu` (
   `id_adm_menu` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL COMMENT '菜单名称',
   `other_name` varchar(255) DEFAULT NULL COMMENT '菜单别名',
@@ -287,19 +320,11 @@ CREATE TABLE IF NOT EXISTS `adm_menu` (
   KEY `fk_adm_menu_adm_menu_1` (`parent_id_adm_menu`)
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.adm_tenement 结构
-CREATE TABLE IF NOT EXISTS `adm_tenement` (
-  `id_adm_tenement` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) DEFAULT NULL COMMENT '名称',
-  `description` varchar(255) DEFAULT NULL COMMENT '描述',
-  `en_short_name` varchar(32) DEFAULT NULL COMMENT '英文简称',
-  PRIMARY KEY (`id_adm_tenement`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.adm_role 结构
-CREATE TABLE IF NOT EXISTS `adm_role` (
+-- ----------------------------
+-- Table structure for adm_role
+-- ----------------------------
+DROP TABLE IF EXISTS `adm_role`;
+CREATE TABLE `adm_role` (
   `id_adm_role` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id_adm_role',
   `role_name` varchar(32) DEFAULT NULL COMMENT '角色名称',
   `description` varchar(255) DEFAULT NULL COMMENT '描述',
@@ -312,11 +337,13 @@ CREATE TABLE IF NOT EXISTS `adm_role` (
   KEY `fk_adm_role_adm_role_1` (`parent_id_adm_role`),
   CONSTRAINT `fk_adm_role_adm_role_1` FOREIGN KEY (`parent_id_adm_role`) REFERENCES `adm_role` (`id_adm_role`),
   CONSTRAINT `fk_adm_role_adm_tenement_1` FOREIGN KEY (`id_adm_tenement`) REFERENCES `adm_tenement` (`id_adm_tenement`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.adm_role_ci_type 结构
-CREATE TABLE IF NOT EXISTS `adm_role_ci_type` (
+-- ----------------------------
+-- Table structure for adm_role_ci_type
+-- ----------------------------
+DROP TABLE IF EXISTS `adm_role_ci_type`;
+CREATE TABLE `adm_role_ci_type` (
   `id_adm_role_ci_type` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id_adm_role_ci_type',
   `id_adm_role` int(11) NOT NULL COMMENT 'id_adm_role',
   `id_adm_ci_type` int(11) NOT NULL COMMENT 'id_adm_ci_type',
@@ -335,9 +362,11 @@ CREATE TABLE IF NOT EXISTS `adm_role_ci_type` (
   CONSTRAINT `fk_adm_role_ci_type_adm_role_1` FOREIGN KEY (`id_adm_role`) REFERENCES `adm_role` (`id_adm_role`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.adm_role_ci_type_ctrl_attr 结构
-CREATE TABLE IF NOT EXISTS `adm_role_ci_type_ctrl_attr` (
+-- ----------------------------
+-- Table structure for adm_role_ci_type_ctrl_attr
+-- ----------------------------
+DROP TABLE IF EXISTS `adm_role_ci_type_ctrl_attr`;
+CREATE TABLE `adm_role_ci_type_ctrl_attr` (
   `id_adm_role_ci_type_ctrl_attr` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id_adm_role_ci_type_ctrl_attr',
   `id_adm_role_ci_type` int(11) NOT NULL COMMENT 'id_adm_role_ci_type',
   `creation_permission` varchar(1) NOT NULL DEFAULT 'N',
@@ -351,9 +380,11 @@ CREATE TABLE IF NOT EXISTS `adm_role_ci_type_ctrl_attr` (
   CONSTRAINT `fk_adm_role_ci_type_attribute_adm_role_ci_type_1` FOREIGN KEY (`id_adm_role_ci_type`) REFERENCES `adm_role_ci_type` (`id_adm_role_ci_type`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.adm_role_ci_type_ctrl_attr_condition 结构
-CREATE TABLE IF NOT EXISTS `adm_role_ci_type_ctrl_attr_condition` (
+-- ----------------------------
+-- Table structure for adm_role_ci_type_ctrl_attr_condition
+-- ----------------------------
+DROP TABLE IF EXISTS `adm_role_ci_type_ctrl_attr_condition`;
+CREATE TABLE `adm_role_ci_type_ctrl_attr_condition` (
   `id_adm_role_ci_type_ctrl_attr_condition` int(11) NOT NULL AUTO_INCREMENT,
   `id_adm_role_ci_type_ctrl_attr` int(11) NOT NULL,
   `id_adm_ci_type_attr` int(11) NOT NULL,
@@ -368,9 +399,11 @@ CREATE TABLE IF NOT EXISTS `adm_role_ci_type_ctrl_attr_condition` (
   CONSTRAINT `fk_adm_role_ci_type_attr_adm_role_ci_type_attr_1` FOREIGN KEY (`id_adm_role_ci_type_ctrl_attr`) REFERENCES `adm_role_ci_type_ctrl_attr` (`id_adm_role_ci_type_ctrl_attr`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.adm_role_menu 结构
-CREATE TABLE IF NOT EXISTS `adm_role_menu` (
+-- ----------------------------
+-- Table structure for adm_role_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `adm_role_menu`;
+CREATE TABLE `adm_role_menu` (
   `id_adm_role_menu` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id_adm_role_menu',
   `id_adm_role` int(11) DEFAULT NULL COMMENT 'id_adm_role',
   `id_adm_menu` int(11) DEFAULT NULL COMMENT 'id_adm_menu',
@@ -383,26 +416,11 @@ CREATE TABLE IF NOT EXISTS `adm_role_menu` (
   CONSTRAINT `fk_adm_role_menu_adm_role_1` FOREIGN KEY (`id_adm_role`) REFERENCES `adm_role` (`id_adm_role`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.adm_user 结构
-CREATE TABLE IF NOT EXISTS `adm_user` (
-  `id_adm_user` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id_adm_user',
-  `name` varchar(64) DEFAULT NULL COMMENT '名称',
-  `code` varchar(100) DEFAULT NULL COMMENT '编码（接口类用户使用）',
-  `encrypted_password` varchar(100) DEFAULT NULL COMMENT '加密的密码',
-  `description` varchar(255) DEFAULT NULL COMMENT '描述',
-  `id_adm_tenement` int(11) DEFAULT NULL COMMENT 'id_adm_tenement',
-  `action_flag` tinyint(1) DEFAULT '0' COMMENT '用户操作Flag',
-  `is_system` int(1) DEFAULT '0' COMMENT '是否系统数据',
-  PRIMARY KEY (`id_adm_user`),
-  UNIQUE KEY `adm_user_code` (`code`),
-  KEY `fk_adm_user_adm_tenement_1` (`id_adm_tenement`),
-  CONSTRAINT `fk_adm_user_adm_tenement_1` FOREIGN KEY (`id_adm_tenement`) REFERENCES `adm_tenement` (`id_adm_tenement`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.adm_role_user 结构
-CREATE TABLE IF NOT EXISTS `adm_role_user` (
+-- ----------------------------
+-- Table structure for adm_role_user
+-- ----------------------------
+DROP TABLE IF EXISTS `adm_role_user`;
+CREATE TABLE `adm_role_user` (
   `id_adm_role_user` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id_adm_role_user',
   `id_adm_role` int(11) DEFAULT NULL COMMENT 'id_adm_role',
   `id_adm_user` int(11) DEFAULT NULL COMMENT 'id_adm_user',
@@ -414,9 +432,11 @@ CREATE TABLE IF NOT EXISTS `adm_role_user` (
   CONSTRAINT `fk_adm_role_user_adm_user_1` FOREIGN KEY (`id_adm_user`) REFERENCES `adm_user` (`id_adm_user`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.adm_sequence 结构
-CREATE TABLE IF NOT EXISTS `adm_sequence` (
+-- ----------------------------
+-- Table structure for adm_sequence
+-- ----------------------------
+DROP TABLE IF EXISTS `adm_sequence`;
+CREATE TABLE `adm_sequence` (
   `id_adm_sequence` int(10) NOT NULL AUTO_INCREMENT COMMENT 'id_adm_sequence',
   `seq_name` varchar(64) NOT NULL COMMENT '序列名称',
   `current_val` int(11) DEFAULT NULL COMMENT '当前值',
@@ -425,11 +445,13 @@ CREATE TABLE IF NOT EXISTS `adm_sequence` (
   `left_zero_padding` varchar(1) DEFAULT NULL COMMENT '是否补零，y为是，n为否',
   PRIMARY KEY (`id_adm_sequence`),
   UNIQUE KEY `seq_name_index` (`seq_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.adm_state_transition 结构
-CREATE TABLE IF NOT EXISTS `adm_state_transition` (
+-- ----------------------------
+-- Table structure for adm_state_transition
+-- ----------------------------
+DROP TABLE IF EXISTS `adm_state_transition`;
+CREATE TABLE `adm_state_transition` (
   `id_adm_state_transition` int(11) NOT NULL,
   `current_state` int(11) DEFAULT NULL,
   `current_state_is_confirmed` tinyint(4) DEFAULT NULL,
@@ -449,9 +471,42 @@ CREATE TABLE IF NOT EXISTS `adm_state_transition` (
   CONSTRAINT `fk_adm_state_transition_target_state` FOREIGN KEY (`target_state`) REFERENCES `adm_basekey_code` (`id_adm_basekey`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.block_storage 结构
-CREATE TABLE IF NOT EXISTS `block_storage` (
+-- ----------------------------
+-- Table structure for adm_tenement
+-- ----------------------------
+DROP TABLE IF EXISTS `adm_tenement`;
+CREATE TABLE `adm_tenement` (
+  `id_adm_tenement` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) DEFAULT NULL COMMENT '名称',
+  `description` varchar(255) DEFAULT NULL COMMENT '描述',
+  `en_short_name` varchar(32) DEFAULT NULL COMMENT '英文简称',
+  PRIMARY KEY (`id_adm_tenement`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for adm_user
+-- ----------------------------
+DROP TABLE IF EXISTS `adm_user`;
+CREATE TABLE `adm_user` (
+  `id_adm_user` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id_adm_user',
+  `name` varchar(64) DEFAULT NULL COMMENT '名称',
+  `code` varchar(100) DEFAULT NULL COMMENT '编码（接口类用户使用）',
+  `encrypted_password` varchar(100) DEFAULT NULL COMMENT '加密的密码',
+  `description` varchar(255) DEFAULT NULL COMMENT '描述',
+  `id_adm_tenement` int(11) DEFAULT NULL COMMENT 'id_adm_tenement',
+  `action_flag` tinyint(1) DEFAULT '0' COMMENT '用户操作Flag',
+  `is_system` int(1) DEFAULT '0' COMMENT '是否系统数据',
+  PRIMARY KEY (`id_adm_user`),
+  UNIQUE KEY `adm_user_code` (`code`),
+  KEY `fk_adm_user_adm_tenement_1` (`id_adm_tenement`),
+  CONSTRAINT `fk_adm_user_adm_tenement_1` FOREIGN KEY (`id_adm_tenement`) REFERENCES `adm_tenement` (`id_adm_tenement`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for block_storage
+-- ----------------------------
+DROP TABLE IF EXISTS `block_storage`;
+CREATE TABLE `block_storage` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -477,9 +532,11 @@ CREATE TABLE IF NOT EXISTS `block_storage` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.business_app_instance 结构
-CREATE TABLE IF NOT EXISTS `business_app_instance` (
+-- ----------------------------
+-- Table structure for business_app_instance
+-- ----------------------------
+DROP TABLE IF EXISTS `business_app_instance`;
+CREATE TABLE `business_app_instance` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -518,9 +575,11 @@ CREATE TABLE IF NOT EXISTS `business_app_instance` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.business_zone 结构
-CREATE TABLE IF NOT EXISTS `business_zone` (
+-- ----------------------------
+-- Table structure for business_zone
+-- ----------------------------
+DROP TABLE IF EXISTS `business_zone`;
+CREATE TABLE `business_zone` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -540,9 +599,11 @@ CREATE TABLE IF NOT EXISTS `business_zone` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.business_zone_design 结构
-CREATE TABLE IF NOT EXISTS `business_zone_design` (
+-- ----------------------------
+-- Table structure for business_zone_design
+-- ----------------------------
+DROP TABLE IF EXISTS `business_zone_design`;
+CREATE TABLE `business_zone_design` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -560,21 +621,25 @@ CREATE TABLE IF NOT EXISTS `business_zone_design` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.business_zone_design$business_group 结构
-CREATE TABLE IF NOT EXISTS `business_zone_design$business_group` (
+-- ----------------------------
+-- Table structure for business_zone_design$business_group
+-- ----------------------------
+DROP TABLE IF EXISTS `business_zone_design$business_group`;
+CREATE TABLE `business_zone_design$business_group` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `from_guid` varchar(15) NOT NULL,
+  `from_guid` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
   `to_code` int(11) NOT NULL,
-  `seq_no` int(5) DEFAULT 0,
+  `seq_no` int(5) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `business_zone_design$business_group_fk_code` (`to_code`),
   CONSTRAINT `business_zone_design$business_group_fk_code` FOREIGN KEY (`to_code`) REFERENCES `adm_basekey_code` (`id_adm_basekey`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=178 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.data_center 结构
-CREATE TABLE IF NOT EXISTS `data_center` (
+-- ----------------------------
+-- Table structure for data_center
+-- ----------------------------
+DROP TABLE IF EXISTS `data_center`;
+CREATE TABLE `data_center` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -596,21 +661,25 @@ CREATE TABLE IF NOT EXISTS `data_center` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.data_center$deploy_environment 结构
-CREATE TABLE IF NOT EXISTS `data_center$deploy_environment` (
+-- ----------------------------
+-- Table structure for data_center$deploy_environment
+-- ----------------------------
+DROP TABLE IF EXISTS `data_center$deploy_environment`;
+CREATE TABLE `data_center$deploy_environment` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `from_guid` varchar(15) NOT NULL,
+  `from_guid` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
   `to_code` int(11) NOT NULL,
   `seq_no` int(5) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `data_center$deploy_environment_fk_code` (`to_code`),
   CONSTRAINT `data_center$deploy_environment_fk_code` FOREIGN KEY (`to_code`) REFERENCES `adm_basekey_code` (`id_adm_basekey`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.data_center_design 结构
-CREATE TABLE IF NOT EXISTS `data_center_design` (
+-- ----------------------------
+-- Table structure for data_center_design
+-- ----------------------------
+DROP TABLE IF EXISTS `data_center_design`;
+CREATE TABLE `data_center_design` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -627,9 +696,11 @@ CREATE TABLE IF NOT EXISTS `data_center_design` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.default_security_policy 结构
-CREATE TABLE IF NOT EXISTS `default_security_policy` (
+-- ----------------------------
+-- Table structure for default_security_policy
+-- ----------------------------
+DROP TABLE IF EXISTS `default_security_policy`;
+CREATE TABLE `default_security_policy` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -651,9 +722,11 @@ CREATE TABLE IF NOT EXISTS `default_security_policy` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.deploy_package 结构
-CREATE TABLE IF NOT EXISTS `deploy_package` (
+-- ----------------------------
+-- Table structure for deploy_package
+-- ----------------------------
+DROP TABLE IF EXISTS `deploy_package`;
+CREATE TABLE `deploy_package` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -685,19 +758,23 @@ CREATE TABLE IF NOT EXISTS `deploy_package` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.deploy_package$diff_conf_variable 结构
-CREATE TABLE IF NOT EXISTS `deploy_package$diff_conf_variable` (
+-- ----------------------------
+-- Table structure for deploy_package$diff_conf_variable
+-- ----------------------------
+DROP TABLE IF EXISTS `deploy_package$diff_conf_variable`;
+CREATE TABLE `deploy_package$diff_conf_variable` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `from_guid` varchar(15) NOT NULL,
-  `to_guid` varchar(15) NOT NULL,
+  `from_guid` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `to_guid` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
   `seq_no` int(5) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3249 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.diff_configuration 结构
-CREATE TABLE IF NOT EXISTS `diff_configuration` (
+-- ----------------------------
+-- Table structure for diff_configuration
+-- ----------------------------
+DROP TABLE IF EXISTS `diff_configuration`;
+CREATE TABLE `diff_configuration` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -715,9 +792,11 @@ CREATE TABLE IF NOT EXISTS `diff_configuration` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.direct_service_invoke 结构
-CREATE TABLE IF NOT EXISTS `direct_service_invoke` (
+-- ----------------------------
+-- Table structure for direct_service_invoke
+-- ----------------------------
+DROP TABLE IF EXISTS `direct_service_invoke`;
+CREATE TABLE `direct_service_invoke` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -737,9 +816,11 @@ CREATE TABLE IF NOT EXISTS `direct_service_invoke` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.invoke 结构
-CREATE TABLE IF NOT EXISTS `invoke` (
+-- ----------------------------
+-- Table structure for invoke
+-- ----------------------------
+DROP TABLE IF EXISTS `invoke`;
+CREATE TABLE `invoke` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -759,9 +840,11 @@ CREATE TABLE IF NOT EXISTS `invoke` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.invoke_design 结构
-CREATE TABLE IF NOT EXISTS `invoke_design` (
+-- ----------------------------
+-- Table structure for invoke_design
+-- ----------------------------
+DROP TABLE IF EXISTS `invoke_design`;
+CREATE TABLE `invoke_design` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -781,9 +864,11 @@ CREATE TABLE IF NOT EXISTS `invoke_design` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.ip_address 结构
-CREATE TABLE IF NOT EXISTS `ip_address` (
+-- ----------------------------
+-- Table structure for ip_address
+-- ----------------------------
+DROP TABLE IF EXISTS `ip_address`;
+CREATE TABLE `ip_address` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -802,9 +887,11 @@ CREATE TABLE IF NOT EXISTS `ip_address` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.network_segment 结构
-CREATE TABLE IF NOT EXISTS `network_segment` (
+-- ----------------------------
+-- Table structure for network_segment
+-- ----------------------------
+DROP TABLE IF EXISTS `network_segment`;
+CREATE TABLE `network_segment` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -827,9 +914,11 @@ CREATE TABLE IF NOT EXISTS `network_segment` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.network_segment_design 结构
-CREATE TABLE IF NOT EXISTS `network_segment_design` (
+-- ----------------------------
+-- Table structure for network_segment_design
+-- ----------------------------
+DROP TABLE IF EXISTS `network_segment_design`;
+CREATE TABLE `network_segment_design` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -850,9 +939,11 @@ CREATE TABLE IF NOT EXISTS `network_segment_design` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.network_zone 结构
-CREATE TABLE IF NOT EXISTS `network_zone` (
+-- ----------------------------
+-- Table structure for network_zone
+-- ----------------------------
+DROP TABLE IF EXISTS `network_zone`;
+CREATE TABLE `network_zone` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -878,9 +969,11 @@ CREATE TABLE IF NOT EXISTS `network_zone` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.network_zone_design 结构
-CREATE TABLE IF NOT EXISTS `network_zone_design` (
+-- ----------------------------
+-- Table structure for network_zone_design
+-- ----------------------------
+DROP TABLE IF EXISTS `network_zone_design`;
+CREATE TABLE `network_zone_design` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -899,9 +992,11 @@ CREATE TABLE IF NOT EXISTS `network_zone_design` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.network_zone_link 结构
-CREATE TABLE IF NOT EXISTS `network_zone_link` (
+-- ----------------------------
+-- Table structure for network_zone_link
+-- ----------------------------
+DROP TABLE IF EXISTS `network_zone_link`;
+CREATE TABLE `network_zone_link` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -926,9 +1021,11 @@ CREATE TABLE IF NOT EXISTS `network_zone_link` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.network_zone_link_design 结构
-CREATE TABLE IF NOT EXISTS `network_zone_link_design` (
+-- ----------------------------
+-- Table structure for network_zone_link_design
+-- ----------------------------
+DROP TABLE IF EXISTS `network_zone_link_design`;
+CREATE TABLE `network_zone_link_design` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -947,9 +1044,11 @@ CREATE TABLE IF NOT EXISTS `network_zone_link_design` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.resource_instance 结构
-CREATE TABLE IF NOT EXISTS `resource_instance` (
+-- ----------------------------
+-- Table structure for resource_instance
+-- ----------------------------
+DROP TABLE IF EXISTS `resource_instance`;
+CREATE TABLE `resource_instance` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -985,9 +1084,11 @@ CREATE TABLE IF NOT EXISTS `resource_instance` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.resource_set 结构
-CREATE TABLE IF NOT EXISTS `resource_set` (
+-- ----------------------------
+-- Table structure for resource_set
+-- ----------------------------
+DROP TABLE IF EXISTS `resource_set`;
+CREATE TABLE `resource_set` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -1012,21 +1113,25 @@ CREATE TABLE IF NOT EXISTS `resource_set` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.resource_set$deploy_environment 结构
-CREATE TABLE IF NOT EXISTS `resource_set$deploy_environment` (
+-- ----------------------------
+-- Table structure for resource_set$deploy_environment
+-- ----------------------------
+DROP TABLE IF EXISTS `resource_set$deploy_environment`;
+CREATE TABLE `resource_set$deploy_environment` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `from_guid` varchar(15) NOT NULL,
+  `from_guid` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
   `to_code` int(11) NOT NULL,
   `seq_no` int(5) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `resource_set$deploy_environment_fk_code` (`to_code`),
   CONSTRAINT `resource_set$deploy_environment_fk_code` FOREIGN KEY (`to_code`) REFERENCES `adm_basekey_code` (`id_adm_basekey`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=291 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.resource_set_design 结构
-CREATE TABLE IF NOT EXISTS `resource_set_design` (
+-- ----------------------------
+-- Table structure for resource_set_design
+-- ----------------------------
+DROP TABLE IF EXISTS `resource_set_design`;
+CREATE TABLE `resource_set_design` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -1045,21 +1150,25 @@ CREATE TABLE IF NOT EXISTS `resource_set_design` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.resource_set_design$cluster_type 结构
-CREATE TABLE IF NOT EXISTS `resource_set_design$cluster_type` (
+-- ----------------------------
+-- Table structure for resource_set_design$cluster_type
+-- ----------------------------
+DROP TABLE IF EXISTS `resource_set_design$cluster_type`;
+CREATE TABLE `resource_set_design$cluster_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `from_guid` varchar(15) NOT NULL,
+  `from_guid` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
   `to_code` int(11) NOT NULL,
   `seq_no` int(5) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `resource_set_design$cluster_type_fk_code` (`to_code`),
   CONSTRAINT `resource_set_design$cluster_type_fk_code` FOREIGN KEY (`to_code`) REFERENCES `adm_basekey_code` (`id_adm_basekey`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=114 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.resource_set_invoke_design 结构
-CREATE TABLE IF NOT EXISTS `resource_set_invoke_design` (
+-- ----------------------------
+-- Table structure for resource_set_invoke_design
+-- ----------------------------
+DROP TABLE IF EXISTS `resource_set_invoke_design`;
+CREATE TABLE `resource_set_invoke_design` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -1077,9 +1186,11 @@ CREATE TABLE IF NOT EXISTS `resource_set_invoke_design` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.routing_rule 结构
-CREATE TABLE IF NOT EXISTS `routing_rule` (
+-- ----------------------------
+-- Table structure for routing_rule
+-- ----------------------------
+DROP TABLE IF EXISTS `routing_rule`;
+CREATE TABLE `routing_rule` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -1094,7 +1205,7 @@ CREATE TABLE IF NOT EXISTS `routing_rule` (
   `code` varchar(200) DEFAULT NULL COMMENT '编码',
   `asset_code` varchar(50) DEFAULT NULL COMMENT '资产编码',
   `dest_network_segment` varchar(15) DEFAULT NULL COMMENT '目标网段',
-  `network_zone_link_design` varchar(15) DEFAULT NULL COMMENT '网络区域连接',
+  `network_zone_link` varchar(15) DEFAULT NULL COMMENT '网络区域连接',
   `routing_rule_design` varchar(15) DEFAULT NULL COMMENT '路由规则设计',
   `vpn_connection_asset_code` varchar(50) DEFAULT NULL,
   `customer_gateway_ip` varchar(50) DEFAULT NULL,
@@ -1103,9 +1214,11 @@ CREATE TABLE IF NOT EXISTS `routing_rule` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.routing_rule_design 结构
-CREATE TABLE IF NOT EXISTS `routing_rule_design` (
+-- ----------------------------
+-- Table structure for routing_rule_design
+-- ----------------------------
+DROP TABLE IF EXISTS `routing_rule_design`;
+CREATE TABLE `routing_rule_design` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -1122,13 +1235,14 @@ CREATE TABLE IF NOT EXISTS `routing_rule_design` (
   `network_zone_link_design` varchar(15) DEFAULT NULL COMMENT '网络区域连接',
   `owner_vpc_network_zone_design` varchar(15) DEFAULT NULL,
   `owner_resource_set_design` varchar(15) DEFAULT NULL,
-  `owner_network_segment_design` varchar(15) DEFAULT NULL COMMENT '资源集合',
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.service_design 结构
-CREATE TABLE IF NOT EXISTS `service_design` (
+-- ----------------------------
+-- Table structure for service_design
+-- ----------------------------
+DROP TABLE IF EXISTS `service_design`;
+CREATE TABLE `service_design` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -1149,9 +1263,11 @@ CREATE TABLE IF NOT EXISTS `service_design` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.service_invoke_design 结构
-CREATE TABLE IF NOT EXISTS `service_invoke_design` (
+-- ----------------------------
+-- Table structure for service_invoke_design
+-- ----------------------------
+DROP TABLE IF EXISTS `service_invoke_design`;
+CREATE TABLE `service_invoke_design` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -1170,9 +1286,11 @@ CREATE TABLE IF NOT EXISTS `service_invoke_design` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.service_invoke_seq_design 结构
-CREATE TABLE IF NOT EXISTS `service_invoke_seq_design` (
+-- ----------------------------
+-- Table structure for service_invoke_seq_design
+-- ----------------------------
+DROP TABLE IF EXISTS `service_invoke_seq_design`;
+CREATE TABLE `service_invoke_seq_design` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -1190,19 +1308,23 @@ CREATE TABLE IF NOT EXISTS `service_invoke_seq_design` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.service_invoke_seq_design$service_invoke_design_sequence 结构
-CREATE TABLE IF NOT EXISTS `service_invoke_seq_design$service_invoke_design_sequence` (
+-- ----------------------------
+-- Table structure for service_invoke_seq_design$service_invoke_design_sequence
+-- ----------------------------
+DROP TABLE IF EXISTS `service_invoke_seq_design$service_invoke_design_sequence`;
+CREATE TABLE `service_invoke_seq_design$service_invoke_design_sequence` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `from_guid` varchar(15) NOT NULL,
-  `to_guid` varchar(15) NOT NULL,
+  `from_guid` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `to_guid` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
   `seq_no` int(5) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.subsys 结构
-CREATE TABLE IF NOT EXISTS `subsys` (
+-- ----------------------------
+-- Table structure for subsys
+-- ----------------------------
+DROP TABLE IF EXISTS `subsys`;
+CREATE TABLE `subsys` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -1217,23 +1339,27 @@ CREATE TABLE IF NOT EXISTS `subsys` (
   `code` varchar(200) DEFAULT NULL COMMENT '编码',
   `manager` varchar(50) DEFAULT NULL COMMENT '运维人员',
   `subsys_design` varchar(15) DEFAULT NULL COMMENT '子系统设计',
-  `we_system` varchar(15) DEFAULT NULL COMMENT '系统',
+  `system` varchar(15) DEFAULT NULL COMMENT '系统',
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.subsys$business_zone 结构
-CREATE TABLE IF NOT EXISTS `subsys$business_zone` (
+-- ----------------------------
+-- Table structure for subsys$business_zone
+-- ----------------------------
+DROP TABLE IF EXISTS `subsys$business_zone`;
+CREATE TABLE `subsys$business_zone` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `from_guid` varchar(15) NOT NULL,
-  `to_guid` varchar(15) NOT NULL,
+  `from_guid` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `to_guid` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
   `seq_no` int(5) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.subsys_design 结构
-CREATE TABLE IF NOT EXISTS `subsys_design` (
+-- ----------------------------
+-- Table structure for subsys_design
+-- ----------------------------
+DROP TABLE IF EXISTS `subsys_design`;
+CREATE TABLE `subsys_design` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -1253,19 +1379,23 @@ CREATE TABLE IF NOT EXISTS `subsys_design` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.subsys_design$business_zone_design 结构
-CREATE TABLE IF NOT EXISTS `subsys_design$business_zone_design` (
+-- ----------------------------
+-- Table structure for subsys_design$business_zone_design
+-- ----------------------------
+DROP TABLE IF EXISTS `subsys_design$business_zone_design`;
+CREATE TABLE `subsys_design$business_zone_design` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `from_guid` varchar(15) NOT NULL,
-  `to_guid` varchar(15) NOT NULL,
+  `from_guid` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `to_guid` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
   `seq_no` int(5) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.system 结构
-CREATE TABLE IF NOT EXISTS `we_system` (
+-- ----------------------------
+-- Table structure for system
+-- ----------------------------
+DROP TABLE IF EXISTS `system`;
+CREATE TABLE `system` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -1284,19 +1414,23 @@ CREATE TABLE IF NOT EXISTS `we_system` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.system$data_center 结构
-CREATE TABLE IF NOT EXISTS `we_system$data_center` (
+-- ----------------------------
+-- Table structure for system$data_center
+-- ----------------------------
+DROP TABLE IF EXISTS `system$data_center`;
+CREATE TABLE `system$data_center` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `from_guid` varchar(15) NOT NULL,
-  `to_guid` varchar(15) NOT NULL,
+  `from_guid` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `to_guid` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
   `seq_no` int(5) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.system_design 结构
-CREATE TABLE IF NOT EXISTS `system_design` (
+-- ----------------------------
+-- Table structure for system_design
+-- ----------------------------
+DROP TABLE IF EXISTS `system_design`;
+CREATE TABLE `system_design` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -1316,9 +1450,11 @@ CREATE TABLE IF NOT EXISTS `system_design` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.unit 结构
-CREATE TABLE IF NOT EXISTS `unit` (
+-- ----------------------------
+-- Table structure for unit
+-- ----------------------------
+DROP TABLE IF EXISTS `unit`;
+CREATE TABLE `unit` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -1342,41 +1478,49 @@ CREATE TABLE IF NOT EXISTS `unit` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.unit$deploy_package 结构
-CREATE TABLE IF NOT EXISTS `unit$deploy_package` (
+-- ----------------------------
+-- Table structure for unit$deploy_package
+-- ----------------------------
+DROP TABLE IF EXISTS `unit$deploy_package`;
+CREATE TABLE `unit$deploy_package` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `from_guid` varchar(15) NOT NULL,
-  `to_guid` varchar(15) NOT NULL,
+  `from_guid` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `to_guid` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
   `seq_no` int(5) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.unit$resource_set 结构
-CREATE TABLE IF NOT EXISTS `unit$resource_set` (
+-- ----------------------------
+-- Table structure for unit$resource_set
+-- ----------------------------
+DROP TABLE IF EXISTS `unit$resource_set`;
+CREATE TABLE `unit$resource_set` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `from_guid` varchar(15) NOT NULL,
-  `to_guid` varchar(15) NOT NULL,
+  `from_guid` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `to_guid` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
   `seq_no` int(5) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.unit$unit_type 结构
-CREATE TABLE IF NOT EXISTS `unit$unit_type` (
+-- ----------------------------
+-- Table structure for unit$unit_type
+-- ----------------------------
+DROP TABLE IF EXISTS `unit$unit_type`;
+CREATE TABLE `unit$unit_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `from_guid` varchar(15) NOT NULL,
+  `from_guid` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
   `to_code` int(11) NOT NULL,
   `seq_no` int(5) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `unit$unit_type_fk_code` (`to_code`),
   CONSTRAINT `unit$unit_type_fk_code` FOREIGN KEY (`to_code`) REFERENCES `adm_basekey_code` (`id_adm_basekey`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 数据导出被取消选择。
--- 导出  表 wecmdb_embedded.unit_design 结构
-CREATE TABLE IF NOT EXISTS `unit_design` (
+-- ----------------------------
+-- Table structure for unit_design
+-- ----------------------------
+DROP TABLE IF EXISTS `unit_design`;
+CREATE TABLE `unit_design` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -1399,7 +1543,3 @@ CREATE TABLE IF NOT EXISTS `unit_design` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 SET FOREIGN_KEY_CHECKS=1;
--- 数据导出被取消选择。
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
