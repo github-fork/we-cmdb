@@ -55,7 +55,6 @@
             <menu code="MENU_ADMIN_PERMISSION_MANAGEMENT" />
             <menu code="MENU_CMDB_ADMIN_BASE_DATA_MANAGEMENT" />
             <menu code="MENU_ADMIN_QUERY_LOG" />
-            <menu code="MENU_ADMIN_USER_PASSWORD_MANAGEMENT" />
         </authority >
     </authorities>
 
