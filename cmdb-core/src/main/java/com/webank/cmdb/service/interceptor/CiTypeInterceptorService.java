@@ -96,15 +96,6 @@ public class CiTypeInterceptorService extends BasicInterceptorService<CiTypeDto,
     @Override
     public void postCreate(CiTypeDto dto, AdmCiType domainBean) {
         staticEntityRepository.createDefaultCiTypeAttrs((AdmCiType) domainBean);
-        createCatType(domainBean);
-    }
-
-    private void createCatType(AdmCiType domainBean) {
-        AdmBasekeyCatType catType = new AdmBasekeyCatType();
-        catType.setCiTypeId(domainBean.getIdAdmCiType());
-        catType.setType(3);
-        catType.setName(domainBean.getName());
-        staticEntityRepository.create(catType);
     }
 
     @Override
