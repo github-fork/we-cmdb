@@ -788,7 +788,7 @@ CREATE TABLE `diff_configuration` (
   `description` varchar(1000) DEFAULT NULL COMMENT '描述说明',
   `code` varchar(200) DEFAULT NULL COMMENT '编码',
   `variable_name` varchar(50) DEFAULT NULL COMMENT '变量名',
-  `variable_value` varchar(1000) DEFAULT NULL COMMENT '变量值',
+  `variable_value` varchar(4000) DEFAULT NULL COMMENT '变量值',
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
