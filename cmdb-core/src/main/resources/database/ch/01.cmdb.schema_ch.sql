@@ -1391,11 +1391,9 @@ CREATE TABLE `subsys_design$business_zone_design` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ----------------------------
--- Table structure for system
--- ----------------------------
-DROP TABLE IF EXISTS `system`;
-CREATE TABLE `system` (
+-- 数据导出被取消选择。
+-- 导出  表 wecmdb_embedded.system 结构
+CREATE TABLE IF NOT EXISTS `system` (
   `guid` varchar(15) NOT NULL COMMENT '全局唯一ID',
   `p_guid` varchar(15) DEFAULT NULL COMMENT '前一版本数据的guid',
   `r_guid` varchar(15) DEFAULT NULL COMMENT '原始数据guid',
@@ -1414,11 +1412,9 @@ CREATE TABLE `system` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for system$data_center
--- ----------------------------
-DROP TABLE IF EXISTS `system$data_center`;
-CREATE TABLE `system$data_center` (
+-- 数据导出被取消选择。
+-- 导出  表 wecmdb_embedded.system$data_center 结构
+CREATE TABLE IF NOT EXISTS `system$data_center` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `from_guid` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
   `to_guid` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,

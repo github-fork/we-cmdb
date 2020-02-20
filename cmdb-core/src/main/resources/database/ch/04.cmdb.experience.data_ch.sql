@@ -886,52 +886,18 @@ INSERT INTO `subsys_design` VALUES ('0002_0000000019', null, '0002_0000000019', 
 INSERT INTO `subsys_design` VALUES ('0002_0000000022', null, '0002_0000000022', 'umadmin', '2020-01-20 08:29:25', 'umadmin', '2020-01-20 08:24:54', 'DMCS_MORE', '34', '2020-01-20 08:25:03', '', 'MORE', '0001_0000000001', '58', '更多子系统', '123456');
 INSERT INTO `subsys_design` VALUES ('0002_0000000023', null, '0002_0000000023', 'umadmin', '2020-02-07 05:48:32', 'umadmin', '2020-02-07 05:41:54', 'DEMO_CLIENT', '34', '2020-02-07 05:48:32', '', 'CLIENT', '0001_0000000002', '59', '演示客户端子系统', '12345');
 
-INSERT INTO `subsys_design$business_zone_design` VALUES ('1', '0002_0000000009', '0028_0000000001', '1');
-INSERT INTO `subsys_design$business_zone_design` VALUES ('2', '0002_0000000009', '0028_0000000004', '2');
-INSERT INTO `subsys_design$business_zone_design` VALUES ('10', '0002_0000000010', '0028_0000000004', '2');
-INSERT INTO `subsys_design$business_zone_design` VALUES ('11', '0002_0000000010', '0028_0000000001', '1');
-INSERT INTO `subsys_design$business_zone_design` VALUES ('18', '0002_0000000015', '0028_0000000010', '2');
-INSERT INTO `subsys_design$business_zone_design` VALUES ('19', '0002_0000000015', '0028_0000000003', '1');
-INSERT INTO `subsys_design$business_zone_design` VALUES ('22', '0002_0000000016', '0028_0000000010', '1');
-INSERT INTO `subsys_design$business_zone_design` VALUES ('23', '0002_0000000014', '0028_0000000013', '1');
-INSERT INTO `subsys_design$business_zone_design` VALUES ('25', '0002_0000000018', '0028_0000000001', '0');
-INSERT INTO `subsys_design$business_zone_design` VALUES ('30', '0002_0000000020', '0028_0000000004', '1');
-INSERT INTO `subsys_design$business_zone_design` VALUES ('31', '0002_0000000021', '0028_0000000001', '0');
-INSERT INTO `subsys_design$business_zone_design` VALUES ('32', '0002_0000000021', '0028_0000000004', '0');
-INSERT INTO `subsys_design$business_zone_design` VALUES ('35', '0002_0000000017', '0028_0000000004', '1');
-INSERT INTO `subsys_design$business_zone_design` VALUES ('36', '0002_0000000017', '0028_0000000001', '2');
-INSERT INTO `subsys_design$business_zone_design` VALUES ('37', '0002_0000000022', '0028_0000000001', '2');
-INSERT INTO `subsys_design$business_zone_design` VALUES ('38', '0002_0000000022', '0028_0000000004', '1');
-INSERT INTO `subsys_design$business_zone_design` VALUES ('39', '0002_0000000023', '0028_0000000013', '1');
-INSERT INTO `subsys_design$business_zone_design` VALUES ('42', '0002_0000000019', '0028_0000000004', '0');
-INSERT INTO `subsys_design$business_zone_design` VALUES ('43', '0002_0000000019', '0028_0000000001', '0');
-INSERT INTO `subsys_design$business_zone_design` VALUES ('44', '0002_0000000012', '0028_0000000013', '1');
-INSERT INTO `subsys_design$business_zone_design` VALUES ('45', '0002_0000000011', '0028_0000000005', '1');
-INSERT INTO `subsys_design$business_zone_design` VALUES ('46', '0002_0000000011', '0028_0000000015', '2');
-
-INSERT INTO `system` VALUES ('0007_0000000001', null, '0007_0000000001', 'umadmin', '2020-02-07 07:39:15', 'umadmin', '2019-12-18 05:23:39', 'PRD_DMCS', '37', '', '', 'DMCS_PRD', '69', '0001_0000000001', '0018_0000000004');
-INSERT INTO `system` VALUES ('0007_0000000002', null, '0007_0000000002', 'umadmin', '2020-02-07 07:39:04', 'umadmin', '2019-12-18 05:24:51', 'PRD_DEMO', '37', '', '', 'DEMO_PRD', '69', '0001_0000000002', '0018_0000000004');
-INSERT INTO `system` VALUES ('0007_0000000003', null, '0007_0000000003', 'umadmin', '2020-02-07 07:38:41', 'umadmin', '2019-12-24 03:52:50', 'PRD_WECUBE', '37', '', '', 'WECUBE_PRD', '69', '0001_0000000003', '0018_0000000004');
-
-INSERT INTO `system$data_center` VALUES ('16', '0007_0000000003', '0018_0000000001', '1');
-INSERT INTO `system$data_center` VALUES ('17', '0007_0000000002', '0018_0000000001', '1');
-INSERT INTO `system$data_center` VALUES ('18', '0007_0000000001', '0018_0000000003', '2');
-INSERT INTO `system$data_center` VALUES ('19', '0007_0000000001', '0018_0000000001', '1');
-
-INSERT INTO `system_design` VALUES ('0001_0000000001', '0001_0000000010', '0001_0000000001', 'umadmin', '2020-01-20 08:29:25', 'umadmin', '2019-12-18 01:53:23', 'DMCS', '35', '', '', 'DMCS', '58', '存款微核心系统', '0025_0000000001', '122122');
-INSERT INTO `system_design` VALUES ('0001_0000000002', null, '0001_0000000002', 'umadmin', '2020-02-07 05:48:32', 'umadmin', '2019-12-18 03:38:08', 'DEMO', '34', '2020-02-07 05:48:32', '', 'DEMO', '59', '演示系统', '0025_0000000001', '876543');
 INSERT INTO `system_design` VALUES ('0001_0000000003', null, '0001_0000000003', 'umadmin', '2020-01-03 02:29:01', 'umadmin', '2019-12-22 12:00:06', 'WECUBE', '34', '', '', 'WECUBE', '254', 'WeCube', '0025_0000000001', null);
 INSERT INTO `system_design` VALUES ('0001_0000000007', null, '0001_0000000001', 'umadmin', '2020-01-15 03:55:21', 'umadmin', '2019-12-18 01:53:23', 'DMCS', '34', '2020-01-03 04:05:07', '1', 'DMCS', '58', '存款微核心系统', '0025_0000000001', '122122');
 INSERT INTO `system_design` VALUES ('0001_0000000008', '0001_0000000007', '0001_0000000001', 'umadmin', '2020-01-15 03:46:17', 'umadmin', '2019-12-18 01:53:23', 'DMCS', '35', '2020-01-10 07:15:08', '2', 'DMCS', '58', '存款微核心系统', '0025_0000000001', '122122');
 INSERT INTO `system_design` VALUES ('0001_0000000010', '0001_0000000008', '0001_0000000001', 'umadmin', '2020-01-20 08:25:04', 'umadmin', '2019-12-18 01:53:23', 'DMCS', '35', '2020-01-20 08:25:03', '', 'DMCS', '58', '存款微核心系统', '0025_0000000001', '122122');
 
+<<<<<<< HEAD
 INSERT INTO `unit` VALUES ('0009_0000000008', null, '0009_0000000008', 'umadmin', '2019-12-25 02:29:53', 'umadmin', '2019-12-21 13:59:08', 'DMCS_PRD_ADM_APP', '37', '', '', 'APP', '', '0008_0000000007', '0003_0000000016', '10000', '20000', '', null, null);
 INSERT INTO `unit` VALUES ('0009_0000000009', null, '0009_0000000009', 'umadmin', '2019-12-25 02:29:53', 'umadmin', '2019-12-24 03:57:44', 'WECUBE_PRD_CORE_APP', '37', '', '', 'APP', '', '0008_0000000009', '0003_0000000020', '8080', '20008', '', null, null);
 INSERT INTO `unit` VALUES ('0009_0000000014', null, '0009_0000000014', 'umadmin', '2019-12-25 02:29:53', 'umadmin', '2019-12-24 07:25:41', 'WECUBE_PRD_CORE_DB', '37', '', '', 'DB', '', '0008_0000000009', '0003_0000000021', '3306', '20008', '', null, null);
 INSERT INTO `unit` VALUES ('0009_0000000018', null, '0009_0000000018', 'umadmin', '2019-12-25 02:29:53', 'umadmin', '2019-12-25 01:37:03', 'DMCS_PRD_CORE_APP', '37', '', '', 'APP', '', '0008_0000000006', '0003_0000000012', '10001', '20001', '', null, null);
 INSERT INTO `unit` VALUES ('0009_0000000019', null, '0009_0000000019', 'umadmin', '2019-12-25 02:29:53', 'umadmin', '2019-12-25 01:38:50', 'DMCS_PRD_CORE_DB', '37', '', '', 'DB', '', '0008_0000000006', '0003_0000000015', '13306', '13306', '', null, null);
 INSERT INTO `unit` VALUES ('0009_0000000020', null, '0009_0000000020', 'umadmin', '2019-12-25 02:29:53', 'umadmin', '2019-12-25 01:40:00', 'DMCS_PRD_ADM_DB', '37', '', '', 'DB', '', '0008_0000000007', '0003_0000000018', '13307', '13307', '', null, null);
-INSERT INTO `unit` VALUES ('0009_0000000021', null, '0009_0000000021', 'umadmin', '2019-12-25 02:29:53', 'umadmin', '2019-12-25 01:41:25', 'DMCS_PRD_PROXY_NGINX', '37', '', '', 'NGINX', '', '0008_0000000010', '0003_0000000025', '10000', '10000', '', null, null);
 INSERT INTO `unit` VALUES ('0009_0000000027', null, '0009_0000000027', 'umadmin', '2019-12-25 11:12:26', 'umadmin', '2019-12-25 11:12:26', 'DMCS_PRD_CORE_ALB', '37', '', '', 'ALB', '', '0008_0000000006', '0003_0000000013', '10000', '10000', '', null, null);
 INSERT INTO `unit` VALUES ('0009_0000000028', null, '0009_0000000028', 'umadmin', '2019-12-25 11:15:07', 'umadmin', '2019-12-25 11:15:07', 'DMCS_PRD_MC_BROWER', '37', '', '', 'BROWER', '', '0008_0000000012', '0003_0000000026', '1000', '100', '', null, null);
 INSERT INTO `unit` VALUES ('0009_0000000029', null, '0009_0000000029', 'umadmin', '2019-12-26 10:46:39', 'umadmin', '2019-12-26 10:46:39', 'DMCS_PRD_CORE_DLB', '37', '', '', 'DLB', '', '0008_0000000006', '0003_0000000014', '13308', '3306', '', null, null);
@@ -964,36 +930,16 @@ INSERT INTO `unit$resource_set` VALUES ('75', '0009_0000000035', '0022_000000000
 INSERT INTO `unit$resource_set` VALUES ('78', '0009_0000000037', '0022_0000000064', '1');
 INSERT INTO `unit$resource_set` VALUES ('85', '0009_0000000034', '0022_0000000007', '1');
 INSERT INTO `unit$resource_set` VALUES ('86', '0009_0000000034', '0022_0000000033', '2');
+=======
+-- 正在导出表  wecmdb_embedded.system 的数据：~3 rows (大约)
+/*!40000 ALTER TABLE `system` DISABLE KEYS */;
+INSERT INTO `system` (`guid`, `p_guid`, `r_guid`, `updated_by`, `updated_date`, `created_by`, `created_date`, `key_name`, `state`, `fixed_date`, `description`, `code`, `deploy_environment`, `system_design`, `region_data_center`) VALUES
+	('0007_0000000001', NULL, '0007_0000000001', NULL, '2020-01-03 04:15:58', NULL, '2019-12-18 05:23:39', 'DMCS_PRD', 37, '', '', 'DMCS_PRD', 69, '0001_0000000001', NULL),
+	('0007_0000000002', NULL, '0007_0000000002', NULL, '2020-01-08 10:24:26', NULL, '2019-12-18 05:24:51', 'PRD_DEMO2', 37, '', '', 'DEMO2_PRD', 69, '0001_0000000002', NULL),
+	('0007_0000000003', NULL, '0007_0000000003', 'admin', '2020-01-03 04:26:02', NULL, '2019-12-24 03:52:50', 'WECUBE_PRD', 37, '2020-01-03 12:26:02', '', 'WECUBE_PRD', 69, '0001_0000000003', NULL);
+/*!40000 ALTER TABLE `system` ENABLE KEYS */;
 
-INSERT INTO `unit$unit_type` VALUES ('9', '0009_0000000006', '66', '1');
-INSERT INTO `unit$unit_type` VALUES ('10', '0009_0000000005', '281', '1');
-INSERT INTO `unit$unit_type` VALUES ('11', '0009_0000000004', '64', '1');
-INSERT INTO `unit$unit_type` VALUES ('12', '0009_0000000003', '281', '1');
-INSERT INTO `unit$unit_type` VALUES ('13', '0009_0000000002', '258', '1');
-INSERT INTO `unit$unit_type` VALUES ('14', '0009_0000000001', '64', '1');
-INSERT INTO `unit$unit_type` VALUES ('15', '0009_0000000007', '66', '1');
-INSERT INTO `unit$unit_type` VALUES ('19', '0009_0000000010', '340', '1');
-INSERT INTO `unit$unit_type` VALUES ('20', '0009_0000000011', '340', '1');
-INSERT INTO `unit$unit_type` VALUES ('21', '0009_0000000012', '340', '1');
-INSERT INTO `unit$unit_type` VALUES ('22', '0009_0000000013', '340', '1');
-INSERT INTO `unit$unit_type` VALUES ('24', '0009_0000000015', '340', '1');
-INSERT INTO `unit$unit_type` VALUES ('26', '0009_0000000016', '340', '1');
-INSERT INTO `unit$unit_type` VALUES ('28', '0009_0000000017', '340', '1');
-INSERT INTO `unit$unit_type` VALUES ('37', '0009_0000000022', '349', '1');
-INSERT INTO `unit$unit_type` VALUES ('45', '0009_0000000021', '258', '1');
-INSERT INTO `unit$unit_type` VALUES ('46', '0009_0000000020', '66', '1');
-INSERT INTO `unit$unit_type` VALUES ('47', '0009_0000000019', '66', '1');
-INSERT INTO `unit$unit_type` VALUES ('48', '0009_0000000018', '64', '1');
-INSERT INTO `unit$unit_type` VALUES ('49', '0009_0000000014', '66', '1');
-INSERT INTO `unit$unit_type` VALUES ('50', '0009_0000000009', '64', '1');
-INSERT INTO `unit$unit_type` VALUES ('51', '0009_0000000008', '64', '1');
-INSERT INTO `unit$unit_type` VALUES ('55', '0009_0000000027', '340', '1');
-INSERT INTO `unit$unit_type` VALUES ('56', '0009_0000000028', '326', '1');
-INSERT INTO `unit$unit_type` VALUES ('57', '0009_0000000029', '341', '1');
-INSERT INTO `unit$unit_type` VALUES ('58', '0009_0000000030', '340', '1');
-INSERT INTO `unit$unit_type` VALUES ('59', '0009_0000000031', '341', '1');
-INSERT INTO `unit$unit_type` VALUES ('60', '0009_0000000032', '326', '1');
-INSERT INTO `unit$unit_type` VALUES ('62', '0009_0000000033', '349', '1');
+-- 正在导出表  wecmdb_embedded.system$data_center 的数据：~7 rows (大约)
 INSERT INTO `unit$unit_type` VALUES ('68', '0009_0000000036', '341', '1');
 INSERT INTO `unit$unit_type` VALUES ('69', '0009_0000000035', '66', '1');
 INSERT INTO `unit$unit_type` VALUES ('71', '0009_0000000037', '340', '1');
@@ -1013,7 +959,6 @@ INSERT INTO `unit_design` VALUES ('0003_0000000024', null, '0003_0000000024', 'u
 INSERT INTO `unit_design` VALUES ('0003_0000000025', null, '0003_0000000025', 'umadmin', '2020-01-03 04:05:07', 'umadmin', '2019-12-24 09:48:46', 'DMCS_PROXY_NGINX', '34', '2020-01-03 04:05:07', '', 'NGINX', '104', '正向代理模块', '0029_0000000012', '0002_0000000015', '257', '361');
 INSERT INTO `unit_design` VALUES ('0003_0000000026', null, '0003_0000000026', 'umadmin', '2020-01-03 04:05:07', 'umadmin', '2019-12-24 09:49:41', 'DMCS_MC_BROWER', '34', '2020-01-03 04:05:07', '', 'BROWER', '103', '管理WEB', '0029_0000000024', '0002_0000000014', '325', '361');
 INSERT INTO `unit_design` VALUES ('0003_0000000027', null, '0003_0000000027', 'umadmin', '2020-01-03 04:05:07', 'umadmin', '2019-12-24 10:34:11', 'DMCS_PROXY_WANLB', '34', '2020-01-03 04:05:07', '', 'WANLB', '104', '负载均衡', '0029_0000000037', '0002_0000000015', '348', '361');
-INSERT INTO `unit_design` VALUES ('0003_0000000028', null, '0003_0000000028', 'umadmin', '2020-01-03 04:05:07', 'umadmin', '2019-12-24 10:44:24', 'DMCS_APIC_APIWEB', '34', '2020-01-03 04:05:07', '', 'APIWEB', '103', 'APIWEB客户端', '0029_0000000028', '0002_0000000016', '325', '361');
 INSERT INTO `unit_design` VALUES ('0003_0000000029', null, '0003_0000000029', 'umadmin', '2020-02-07 05:48:32', 'umadmin', '2019-12-31 03:37:35', 'DEMO_CORE_APP', '34', '2020-02-07 05:48:32', '', 'APP', '104', '演示业务应用', '0029_0000000008', '0002_0000000017', '60', '361');
 INSERT INTO `unit_design` VALUES ('0003_0000000030', null, '0003_0000000030', 'umadmin', '2020-02-07 05:48:32', 'umadmin', '2019-12-31 03:38:11', 'DEMO_CORE_DB', '34', '2020-02-07 05:48:32', '', 'DB', '104', '演示业务数据库', '0029_0000000010', '0002_0000000017', '61', '361');
 INSERT INTO `unit_design` VALUES ('0003_0000000032', null, '0003_0000000032', 'umadmin', '2020-02-07 06:13:43', 'umadmin', '2020-01-03 04:17:51', 'DMCS_BATCH_APP', '34', '2020-01-10 07:15:08', '', 'APP', '104', '跑批单元', '0029_0000000001', '0002_0000000019', '60', '361');

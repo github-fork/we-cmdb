@@ -51,42 +51,47 @@ INSERT INTO `adm_basekey_cat` VALUES ('50', 'network_zone_type', '网络区域�
 INSERT INTO `adm_basekey_cat` VALUES ('51', 'security_policy_type', '安全规则类型', null, '40', null);
 INSERT INTO `adm_basekey_cat` VALUES ('52', 'security_policy_action', '安全规则行为', null, '40', null);
 
-INSERT INTO `adm_basekey_cat_type` VALUES ('1', 'sys', null, null, '1');
-INSERT INTO `adm_basekey_cat_type` VALUES ('2', 'common', null, null, '2');
-INSERT INTO `adm_basekey_cat_type` VALUES ('3', 'system_design', '系统设计', '1', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('4', 'subsys_design', '子系统设计', '2', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('5', 'unit_design', '单元设计', '3', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('6', 'service_design', '服务设计', '4', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('7', 'invoke_design', '调用设计', '5', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('8', 'service_invoke_seq_design', '服务调用时序设计', '6', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('9', 'system', '系统', '7', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('10', 'subsys', '子系统', '8', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('11', 'unit', '单元', '9', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('13', 'invoke', '调用', '11', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('14', 'deploy_package', '部署包', '12', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('16', 'business_app_instance', '业务应用实例', '14', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('17', 'resource_instance', '资源实例', '15', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('18', 'block_storage', '块存储', '16', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('19', 'ip_address', 'IP地址', '17', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('20', 'data_center', '数据中心', '18', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('21', 'network_zone', '网络区域', '19', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('22', 'network_zone_link', '网络区域连接', '20', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('23', 'business_zone', '业务区域', '21', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('24', 'resource_set', '资源集合', '22', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('25', 'network_segment', '网段', '23', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('26', 'routing_rule', '路由规则', '24', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('27', 'data_center_design', '数据中心设计', '25', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('28', 'network_zone_design', '网络区域设计', '26', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('29', 'network_zone_link_design', '网络区域连接设计', '27', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('30', 'business_zone_design', '业务区域设计', '28', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('31', 'resource_set_design', '资源集合设计', '29', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('32', 'network_segment_design', '网段设计', '30', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('33', 'routing_rule_design', '路由规则设计', '31', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('34', 'diff_configuration', '差异配置', '32', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('37', 'service_invoke_design', '服务调用设计', '35', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('38', 'resource_set_invoke_desig', '资源集合调用设计', '36', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('40', '默认安全策略', null, '38', '3');
-INSERT INTO `adm_basekey_cat_type` VALUES ('41', '直连服务调用', null, '39', '3');
+-- 正在导出表  wecmdb_embedded.adm_basekey_cat_type 的数据：~38 rows (大约)
+/*!40000 ALTER TABLE `adm_basekey_cat_type` DISABLE KEYS */;
+INSERT INTO `adm_basekey_cat_type` (`id_adm_basekey_cat_type`, `name`, `description`, `ci_type_id`, `type`) VALUES
+	(1, 'sys', NULL, NULL, 1),
+	(2, 'common', NULL, NULL, 2),
+	(3, 'system_design', '系统设计', 1, 3),
+	(4, 'subsys_design', '子系统设计', 2, 3),
+	(5, 'unit_design', '单元设计', 3, 3),
+	(6, 'service_design', '服务设计', 4, 3),
+	(7, 'invoke_design', '调用设计', 5, 3),
+	(8, 'service_invoke_seq_design', '服务调用时序设计', 6, 3),
+	(9, 'system', '系统', 7, 3),
+	(10, 'subsys', '子系统', 8, 3),
+	(11, 'unit', '单元', 9, 3),
+	(12, 'service', '服务', 10, 3),
+	(13, 'invoke', '调用', 11, 3),
+	(14, 'deploy_package', '部署包', 12, 3),
+	(16, 'business_app_instance', '业务应用实例', 14, 3),
+	(17, 'resource_instance', '资源实例', 15, 3),
+	(18, 'block_storage', '块存储', 16, 3),
+	(19, 'ip_address', 'IP地址', 17, 3),
+	(20, 'data_center', '数据中心', 18, 3),
+	(21, 'network_zone', '网络区域', 19, 3),
+	(22, 'network_zone_link', '网络区域连接', 20, 3),
+	(23, 'business_zone', '业务区域', 21, 3),
+	(24, 'resource_set', '资源集合', 22, 3),
+	(25, 'network_segment', '网段', 23, 3),
+	(26, 'routing_rule', '路由规则', 24, 3),
+	(27, 'data_center_design', '数据中心设计', 25, 3),
+	(28, 'network_zone_design', '网络区域设计', 26, 3),
+	(29, 'network_zone_link_design', '网络区域连接设计', 27, 3),
+	(30, 'business_zone_design', '业务区域设计', 28, 3),
+	(31, 'resource_set_design', '资源集合设计', 29, 3),
+	(32, 'network_segment_design', '网段设计', 30, 3),
+	(33, 'routing_rule_design', '路由规则设计', 31, 3),
+	(34, 'diff_configuration', '差异配置', 32, 3),
+	(37, 'service_invoke_design', '服务调用设计', 35, 3),
+	(38, 'resource_set_invoke_desig', '资源集合调用设计', 36, 3),
+	(40, '默认安全策略', NULL, 38, 3),
+	(41, '直连服务调用', NULL, 39, 3);
+/*!40000 ALTER TABLE `adm_basekey_cat_type` ENABLE KEYS */;
 
 INSERT INTO `adm_basekey_code` VALUES ('1', '1', 'AAL', '应用架构层', null, '应用架构层', '1', 'active');
 INSERT INTO `adm_basekey_code` VALUES ('2', '1', 'ADL', '应用部署层', null, '应用部署层', '4', 'active');
@@ -351,40 +356,46 @@ INSERT INTO `adm_basekey_code` VALUES ('386', '52', 'ACCEPT', '通过', null, nu
 INSERT INTO `adm_basekey_code` VALUES ('387', '19', 'guid_of_deploy_detail', '[{\"ciTypeId\": 7},{ \"ciTypeId\": 1, \"parentRs\": { \"attrId\": 106, \"isReferedFromParent\": 1}}]', null, null, '8', 'active');
 INSERT INTO `adm_basekey_code` VALUES ('391', '1', 'APL', '应用开发层', null, '应用开发层', '2', 'active');
 
-INSERT INTO `adm_ci_type` VALUES ('1', '系统设计', '系统设计', null, 'system_design', 'created', '6', null, '1', '1', null, '1', null);
-INSERT INTO `adm_ci_type` VALUES ('2', '子系统设计', '子系统设计', null, 'subsys_design', 'created', '6', null, '2', '1', null, '2', null);
-INSERT INTO `adm_ci_type` VALUES ('3', '单元设计', '单元设计', null, 'unit_design', 'created', '6', null, '3', '1', null, '3', null);
-INSERT INTO `adm_ci_type` VALUES ('4', '服务设计', '服务设计', null, 'service_design', 'created', '6', null, '4', '1', null, '4', null);
-INSERT INTO `adm_ci_type` VALUES ('5', '调用设计', '调用设计', null, 'invoke_design', 'created', '6', null, '5', '1', null, '5', null);
-INSERT INTO `adm_ci_type` VALUES ('6', '服务调用时序设计', '服务调用时序设计', null, 'service_invoke_seq_design', 'created', '6', null, '6', '1', null, '6', null);
-INSERT INTO `adm_ci_type` VALUES ('7', '系统', '系统', null, 'system', 'created', '7', null, '1', '2', null, '1', null);
-INSERT INTO `adm_ci_type` VALUES ('8', '子系统', '子系统', null, 'subsys', 'created', '7', null, '2', '2', null, '7', null);
-INSERT INTO `adm_ci_type` VALUES ('9', '单元', '单元', null, 'unit', 'created', '7', null, '3', '2', null, '8', null);
-INSERT INTO `adm_ci_type` VALUES ('11', '调用', '调用', null, 'invoke', 'created', '7', null, '5', '2', null, '10', null);
-INSERT INTO `adm_ci_type` VALUES ('12', '部署包', '部署包', null, 'deploy_package', 'created', '7', null, '6', '391', null, '11', null);
-INSERT INTO `adm_ci_type` VALUES ('14', '业务应用实例', '业务应用实例', null, 'business_app_instance', 'created', '8', null, '1', '2', null, '15', null);
-INSERT INTO `adm_ci_type` VALUES ('15', '资源实例', '资源实例', null, 'resource_instance', 'created', '8', null, '2', '3', null, '12', null);
-INSERT INTO `adm_ci_type` VALUES ('16', '块存储', '块存储', null, 'block_storage', 'created', '8', null, '3', '3', null, '13', null);
-INSERT INTO `adm_ci_type` VALUES ('17', 'IP地址', 'IP地址', null, 'ip_address', 'created', '8', null, '4', '3', null, '14', null);
-INSERT INTO `adm_ci_type` VALUES ('18', '数据中心', '数据中心', null, 'data_center', 'created', '9', null, '1', '4', null, '16', null);
-INSERT INTO `adm_ci_type` VALUES ('19', '网络区域', '网络区域', null, 'network_zone', 'created', '9', null, '2', '4', null, '17', null);
-INSERT INTO `adm_ci_type` VALUES ('20', '网络区域连接', '网络区域连接', null, 'network_zone_link', 'created', '9', null, '3', '4', null, '18', null);
-INSERT INTO `adm_ci_type` VALUES ('21', '业务区域', '业务区域', null, 'business_zone', 'created', '9', null, '4', '4', null, '19', null);
-INSERT INTO `adm_ci_type` VALUES ('22', '资源集合', '资源集合', null, 'resource_set', 'created', '9', null, '5', '4', null, '20', null);
-INSERT INTO `adm_ci_type` VALUES ('23', '网段', '网段', null, 'network_segment', 'created', '9', null, '6', '4', null, '21', null);
-INSERT INTO `adm_ci_type` VALUES ('24', '路由规则', '路由规则', null, 'routing_rule', 'created', '9', null, '7', '4', null, '10', null);
-INSERT INTO `adm_ci_type` VALUES ('25', '数据中心设计', '数据中心设计', null, 'data_center_design', 'created', '10', null, '1', '5', null, '22', null);
-INSERT INTO `adm_ci_type` VALUES ('26', '网络区域设计', '网络区域设计', null, 'network_zone_design', 'created', '10', null, '2', '5', null, '23', null);
-INSERT INTO `adm_ci_type` VALUES ('27', '网络区域连接设计', '网络区域连接设计', null, 'network_zone_link_design', 'created', '10', null, '3', '5', null, '24', null);
-INSERT INTO `adm_ci_type` VALUES ('28', '业务区域设计', '业务区域设计', null, 'business_zone_design', 'created', '10', null, '4', '5', null, '25', null);
-INSERT INTO `adm_ci_type` VALUES ('29', '资源集合设计', '资源集合设计', null, 'resource_set_design', 'created', '10', null, '5', '5', null, '26', null);
-INSERT INTO `adm_ci_type` VALUES ('30', '网段设计', '网段设计', null, 'network_segment_design', 'created', '10', null, '6', '5', null, '21', null);
-INSERT INTO `adm_ci_type` VALUES ('31', '路由规则设计', '路由规则设计', null, 'routing_rule_design', 'created', '10', null, '7', '5', null, '5', null);
-INSERT INTO `adm_ci_type` VALUES ('32', '差异配置', '差异配置', null, 'diff_configuration', 'created', '7', null, '8', '391', null, '11', null);
-INSERT INTO `adm_ci_type` VALUES ('35', '服务调用设计', '服务调用设计', null, 'service_invoke_design', 'created', null, null, '1', '1', null, '9', null);
-INSERT INTO `adm_ci_type` VALUES ('36', '资源集合调用设计', '资源集合调用设计', null, 'resource_set_invoke_design', 'created', null, null, '2', '5', null, '15', null);
-INSERT INTO `adm_ci_type` VALUES ('38', '默认安全策略', '默认安全策略', null, 'default_security_policy', 'created', null, null, '4', '4', null, '15', null);
-INSERT INTO `adm_ci_type` VALUES ('39', '直连服务调用', '直连服务调用', null, 'direct_service_invoke', 'created', null, null, '5', '2', null, '10', null);
+-- 正在导出表  wecmdb_embedded.adm_ci_type 的数据：~37 rows (大约)
+/*!40000 ALTER TABLE `adm_ci_type` DISABLE KEYS */;
+INSERT INTO `adm_ci_type` (`id_adm_ci_type`, `name`, `description`, `id_adm_tenement`, `table_name`, `status`, `catalog_id`, `ci_global_unique_id`, `seq_no`, `layer_id`, `zoom_level_id`, `image_file_id`, `ci_state_type`) VALUES
+	(1, '系统设计', '系统设计', NULL, 'system_design', 'created', 6, NULL, 1, 1, NULL, 35, NULL),
+	(2, '子系统设计', '子系统设计', NULL, 'subsys_design', 'created', 6, NULL, 2, 1, NULL, 36, NULL),
+	(3, '单元设计', '单元设计', NULL, 'unit_design', 'created', 6, NULL, 3, 1, NULL, 37, NULL),
+	(4, '服务设计', '服务设计', NULL, 'service_design', 'created', 6, NULL, 4, 1, NULL, 38, NULL),
+	(5, '调用设计', '调用设计', NULL, 'invoke_design', 'created', 6, NULL, 5, 1, NULL, 39, NULL),
+	(6, '服务调用时序设计', '服务调用时序设计', NULL, 'service_invoke_seq_design', 'created', 6, NULL, 6, 1, NULL, 40, NULL),
+	(7, '系统', '系统', NULL, 'system', 'created', 7, NULL, 1, 2, NULL, 67, NULL),
+	(8, '子系统', '子系统', NULL, 'subsys', 'created', 7, NULL, 2, 2, NULL, 41, NULL),
+	(9, '单元', '单元', NULL, 'unit', 'created', 7, NULL, 3, 2, NULL, 42, NULL),
+	(10, '服务', '服务', NULL, 'service', 'created', 7, NULL, 4, 2, NULL, 43, NULL),
+	(11, '调用', '调用', NULL, 'invoke', 'created', 7, NULL, 5, 2, NULL, 44, NULL),
+	(12, '部署包', '部署包', NULL, 'deploy_package', 'created', 7, NULL, 6, 391, NULL, 47, NULL),
+	(14, '业务应用实例', '业务应用实例', NULL, 'business_app_instance', 'created', 8, NULL, 1, 2, NULL, 48, NULL),
+	(15, '资源实例', '资源实例', NULL, 'resource_instance', 'created', 8, NULL, 2, 3, NULL, 49, NULL),
+	(16, '块存储', '块存储', NULL, 'block_storage', 'created', 8, NULL, 3, 3, NULL, 50, NULL),
+	(17, 'IP地址', 'IP地址', NULL, 'ip_address', 'created', 8, NULL, 4, 3, NULL, 51, NULL),
+	(18, '数据中心', '数据中心', NULL, 'data_center', 'created', 9, NULL, 1, 4, NULL, 52, NULL),
+	(19, '网络区域', '网络区域', NULL, 'network_zone', 'created', 9, NULL, 2, 4, NULL, 53, NULL),
+	(20, '网络区域连接', '网络区域连接', NULL, 'network_zone_link', 'created', 9, NULL, 3, 4, NULL, 54, NULL),
+	(21, '业务区域', '业务区域', NULL, 'business_zone', 'created', 9, NULL, 4, 4, NULL, 55, NULL),
+	(22, '资源集合', '资源集合', NULL, 'resource_set', 'created', 9, NULL, 5, 4, NULL, 56, NULL),
+	(23, '网段', '网段', NULL, 'network_segment', 'created', 9, NULL, 6, 4, NULL, 57, NULL),
+	(24, '路由规则', '路由规则', NULL, 'routing_rule', 'created', 9, NULL, 7, 4, NULL, 59, NULL),
+	(25, '数据中心设计', '数据中心设计', NULL, 'data_center_design', 'created', 10, NULL, 1, 5, NULL, 60, NULL),
+	(26, '网络区域设计', '网络区域设计', NULL, 'network_zone_design', 'created', 10, NULL, 2, 5, NULL, 61, NULL),
+	(27, '网络区域连接设计', '网络区域连接设计', NULL, 'network_zone_link_design', 'created', 10, NULL, 3, 5, NULL, 62, NULL),
+	(28, '业务区域设计', '业务区域设计', NULL, 'business_zone_design', 'created', 10, NULL, 4, 5, NULL, 63, NULL),
+	(29, '资源集合设计', '资源集合设计', NULL, 'resource_set_design', 'created', 10, NULL, 5, 5, NULL, 64, NULL),
+	(30, '网段设计', '网段设计', NULL, 'network_segment_design', 'created', 10, NULL, 6, 5, NULL, 65, NULL),
+	(31, '路由规则设计', '路由规则设计', NULL, 'routing_rule_design', 'created', 10, NULL, 7, 5, NULL, 66, NULL),
+	(32, '差异配置', '差异配置', NULL, 'diff_configuration', 'created', 7, NULL, 8, 391, NULL, 1, NULL),
+	(35, '服务调用设计', '服务调用设计', NULL, 'service_invoke_design', 'created', NULL, NULL, 1, 1, NULL, 9, NULL),
+	(36, '资源集合调用设计', '资源集合调用设计', NULL, 'resource_set_invoke_design', 'created', NULL, NULL, 2, 5, NULL, 5, NULL),
+	(37, '资源集合调用', '资源集合调用', NULL, 'resource_set_invoke', 'created', NULL, NULL, 3, 4, NULL, 1, NULL),
+	(38, '默认安全策略', '默认安全策略', NULL, 'default_security_policy', 'created', NULL, NULL, 4, 4, NULL, 1, NULL),
+	(39, '直连服务调用', '直连服务调用', NULL, 'direct_service_invoke', 'created', NULL, NULL, 5, 2, NULL, 1, NULL);
+/*!40000 ALTER TABLE `adm_ci_type` ENABLE KEYS */;
 
 INSERT INTO `adm_ci_type_attr_base` VALUES ('1', '1', '全局唯一ID', '全局唯一ID', 'text', 'guid', 'varchar', '15', null, null, null, null, '0', '0', '0', '0', '1', '0', '0', '0', null, 'notCreated', '1', '0', '0', null, null, '0');
 INSERT INTO `adm_ci_type_attr_base` VALUES ('2', '1', '前全局唯一ID', '前一版本数据的guid', 'text', 'p_guid', 'varchar', '15', null, null, null, null, '0', '0', '0', '1', '0', '0', '0', '0', null, 'notCreated', '1', '0', '0', null, null, '1');
@@ -629,4 +640,116 @@ INSERT INTO `adm_state_transition` VALUES ('57', '36', '0', '36', '1', '49', '57
 
 INSERT INTO `adm_user` VALUES ('1', 'admin', 'admin', '$2a$10$Gh3WDwZ8kFpxbmo/h.oywuN.LuYwgrlx53ZeG.mz7P4eKgct7IYZm', 'admin', null, '0', '1');
 
+-- 正在导出表  wecmdb_embedded.adm_sequence 的数据：~36 rows (大约)
+/*!40000 ALTER TABLE `adm_sequence` DISABLE KEYS */;
+INSERT INTO `adm_sequence` (`id_adm_sequence`, `seq_name`, `current_val`, `increment_val`, `length_limitation`, `left_zero_padding`) VALUES
+	(1, 'network_segment_design', 72, 1, 8, 'N'),
+	(2, 'data_center_design', 1, 1, 8, 'N'),
+	(3, 'network_segment', 138, 1, 8, 'N'),
+	(4, 'network_zone_design', 8, 1, 8, 'N'),
+	(5, 'network_zone_link_design', 14, 1, 8, 'N'),
+	(6, 'business_zone_design', 18, 1, 8, 'N'),
+	(7, 'resource_set_design', 37, 1, 8, 'N'),
+	(9, 'routing_rule_design', 71, 1, 8, 'N'),
+	(11, 'data_center', 4, 1, 8, 'N'),
+	(12, 'network_zone', 37, 1, 8, 'N'),
+	(13, 'ip_address', 109, 1, 8, 'N'),
+	(14, 'business_zone', 35, 1, 8, 'N'),
+	(15, 'resource_set', 68, 1, 8, 'N'),
+	(17, 'resource_instance', 29, 1, 8, 'N'),
+	(23, 'network_zone_link', 17, 1, 8, 'N'),
+	(25, 'routing_rule', 137, 1, 8, 'N'),
+	(26, 'system_design', 7, 1, 8, 'N'),
+	(27, 'subsys_design', 21, 1, 8, 'N'),
+	(29, 'unit_design', 35, 1, 8, 'N'),
+	(30, 'service_design', 17, 1, 8, 'N'),
+	(32, 'invoke_design', 31, 1, 8, 'N'),
+	(33, 'invoke_seq_design', 3, 1, 8, 'N'),
+	(34, 'system', 3, 1, 8, 'N'),
+	(35, 'subsys', 13, 1, 8, 'N'),
+	(37, 'unit', 37, 1, 8, 'N'),
+	(38, 'service', 4, 1, 8, 'N'),
+	(39, 'invoke', 5, 1, 8, 'N'),
+	(40, 'resource_set_invoke_design', 56, 1, 8, 'N'),
+	(41, 'resource_set_invoke', 9, 1, 8, 'N'),
+	(42, 'service_invoke_design', 6, 1, 8, 'N'),
+	(43, 'service_invoke_seq_design', 2, 1, 8, 'N'),
+	(45, 'business_app_instance', 21, 1, 8, 'N'),
+	(46, 'deploy_package', 37, 1, 8, 'N'),
+	(48, 'default_security_policy', 39, 1, 8, 'N'),
+	(49, 'direct_service_invoke', 1, 1, 8, 'N'),
+	(50, 'diff_configuration', 90, 1, 8, 'N');
+/*!40000 ALTER TABLE `adm_sequence` ENABLE KEYS */;
+
+-- 正在导出表  wecmdb_embedded.adm_state_transition 的数据：~57 rows (大约)
+/*!40000 ALTER TABLE `adm_state_transition` DISABLE KEYS */;
+INSERT INTO `adm_state_transition` (`id_adm_state_transition`, `current_state`, `current_state_is_confirmed`, `target_state`, `target_state_is_confirmed`, `operation`, `action`, `status`) VALUES
+	(1, 37, 0, NULL, NULL, 48, 54, 'active'),
+	(2, NULL, NULL, 37, 0, 45, 52, 'active'),
+	(3, 37, 0, 37, 0, 46, 56, 'active'),
+	(4, 37, 0, 37, 1, 49, 57, 'active'),
+	(5, 37, 1, 38, 0, 46, 53, 'active'),
+	(6, 38, 0, 37, 1, 47, 55, 'active'),
+	(7, 37, 1, 39, 0, 48, 53, 'active'),
+	(8, 39, 0, 37, 1, 47, 55, 'active'),
+	(9, 38, 0, 38, 0, 46, 56, 'active'),
+	(10, 38, 0, 38, 1, 49, 57, 'active'),
+	(11, 38, 1, 38, 0, 46, 53, 'active'),
+	(12, 38, 0, 38, 1, 47, 55, 'active'),
+	(13, 38, 1, 39, 0, 48, 53, 'active'),
+	(14, 39, 0, 38, 1, 47, 55, 'active'),
+	(15, 39, 0, 39, 1, 49, 57, 'active'),
+	(16, 40, 0, NULL, NULL, 48, 54, 'active'),
+	(17, NULL, NULL, 40, 0, 45, 52, 'active'),
+	(18, 40, 0, 40, 0, 46, 56, 'active'),
+	(19, 40, 0, 40, 1, 49, 57, 'active'),
+	(20, 40, 1, 41, 0, 50, 53, 'active'),
+	(21, 41, 0, 40, 1, 47, 55, 'active'),
+	(22, 41, 0, 41, 1, 49, 57, 'active'),
+	(23, 40, 1, 43, 0, 51, 53, 'active'),
+	(24, 43, 0, 40, 1, 47, 55, 'active'),
+	(25, 43, 0, 43, 1, 49, 57, 'active'),
+	(26, 41, 1, 43, 0, 51, 53, 'active'),
+	(27, 43, 0, 41, 1, 47, 55, 'active'),
+	(28, 43, 1, 41, 0, 50, 53, 'active'),
+	(29, 41, 0, 43, 1, 47, 55, 'active'),
+	(30, 41, 1, 42, 0, 46, 53, 'active'),
+	(31, 42, 0, 41, 1, 47, 55, 'active'),
+	(32, 43, 1, 42, 0, 46, 53, 'active'),
+	(33, 42, 0, 43, 1, 47, 55, 'active'),
+	(34, 42, 0, 42, 0, 46, 56, 'active'),
+	(35, 42, 0, 42, 1, 49, 57, 'active'),
+	(36, 42, 1, 43, 0, 51, 53, 'active'),
+	(37, 43, 0, 42, 1, 47, 55, 'active'),
+	(38, 42, 1, 41, 0, 50, 53, 'active'),
+	(39, 41, 0, 42, 1, 47, 55, 'active'),
+	(40, 43, 1, 44, 0, 48, 53, 'active'),
+	(41, 44, 0, 43, 1, 47, 55, 'active'),
+	(42, 44, 0, 44, 1, 49, 57, 'active'),
+	(43, 34, 0, NULL, NULL, 48, 54, 'active'),
+	(44, NULL, NULL, 34, 0, 45, 52, 'active'),
+	(45, 34, 0, 34, 0, 46, 56, 'active'),
+	(46, 34, 0, 34, 1, 49, 57, 'active'),
+	(47, 34, 1, 35, 0, 46, 53, 'active'),
+	(48, 35, 0, 34, 1, 47, 55, 'active'),
+	(49, 34, 1, 36, 0, 48, 53, 'active'),
+	(50, 36, 0, 34, 1, 47, 55, 'active'),
+	(51, 35, 0, 35, 0, 46, 56, 'active'),
+	(52, 35, 0, 35, 1, 49, 57, 'active'),
+	(53, 35, 1, 35, 0, 46, 53, 'active'),
+	(54, 35, 0, 35, 1, 47, 55, 'active'),
+	(55, 35, 1, 36, 0, 48, 53, 'active'),
+	(56, 36, 0, 35, 1, 47, 55, 'active'),
+	(57, 36, 0, 36, 1, 49, 57, 'active');
+/*!40000 ALTER TABLE `adm_state_transition` ENABLE KEYS */;
+
+-- 正在导出表  wecmdb_embedded.adm_tenement 的数据：~0 rows (大约)
+/*!40000 ALTER TABLE `adm_tenement` DISABLE KEYS */;
+/*!40000 ALTER TABLE `adm_tenement` ENABLE KEYS */;
+
+-- 正在导出表  wecmdb_embedded.adm_user 的数据：~0 rows (大约)
+/*!40000 ALTER TABLE `adm_user` DISABLE KEYS */;
+INSERT INTO `adm_user` (`id_adm_user`, `name`, `code`, `encrypted_password`, `description`, `id_adm_tenement`, `action_flag`, `is_system`) VALUES
+	(1, 'admin', 'admin', '$2a$10$Gh3WDwZ8kFpxbmo/h.oywuN.LuYwgrlx53ZeG.mz7P4eKgct7IYZm', 'admin', NULL, 0, 1);
+/*!40000 ALTER TABLE `adm_user` ENABLE KEYS */;
 SET FOREIGN_KEY_CHECKS=1;
