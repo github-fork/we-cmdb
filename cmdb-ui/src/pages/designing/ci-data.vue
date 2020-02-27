@@ -63,7 +63,6 @@ import {
   deleteCiDatas,
   createCiDatas,
   updateCiDatas,
-  getEnumCodesByCategoryId,
   operateCiState
 } from '@/api/server'
 import { setHeaders, baseURL } from '@/api/base.js'
@@ -417,7 +416,8 @@ export default {
                         size: 'small'
                       },
                       actionType: 'compare',
-                      isDisabled: row => !row.weTableForm.p_guid
+                      isDisabled: row => !row.weTableForm.p_guid,
+                      isLoading: row => !!row.weTableForm.compareLoading
                     }
                   ])
                 ),
@@ -513,7 +513,7 @@ export default {
       }
     },
     async compareHandler (row) {
-      this.compareVisible = true
+      this.$set(row.weTableForm, 'compareLoading', true)
       const query = {
         id: this.currentTab,
         queryObject: {
@@ -528,6 +528,7 @@ export default {
         }
       }
       const { statusCode, data } = await queryCiData(query)
+      this.$set(row.weTableForm, 'compareLoading', false)
       if (statusCode === 'OK') {
         this.compareData = data && data.contents && data.contents.map(x => x.data)
         this.compareData = this.compareData
@@ -549,6 +550,7 @@ export default {
             return x
           })
       }
+      this.compareVisible = true
     },
     sortHandler (data) {
       if (data.order === 'normal') {
@@ -575,7 +577,9 @@ export default {
       this.queryCiData()
     },
     async defaultHandler (type, row) {
+      this.$set(row.weTableForm, `${type}Loading`, true)
       const { statusCode, message } = await operateCiState(this.currentTab, row.guid, type)
+      this.$set(row.weTableForm, `${type}Loading`, false)
       if (statusCode === 'OK') {
         this.$Notice.success({
           title: 'Success',
@@ -699,6 +703,14 @@ export default {
       let addAry = d.filter(_ => _.isNewAddedRow)
       let editAry = d.filter(_ => !_.isNewAddedRow)
       if (addAry.length > 0) {
+        const found = this.tabList.find(_ => _.id === this.currentTab)
+        if (found) {
+          found.outerActions.forEach(_ => {
+            if (_.actionType === 'save') {
+              _.props.loading = true
+            }
+          })
+        }
         const deleteAttrs = this.deleteAttr()
         addAry.forEach(_ => {
           deleteAttrs.forEach(attr => {
@@ -715,6 +727,13 @@ export default {
           createData: addAry
         }
         const { statusCode, message } = await createCiDatas(payload)
+        if (found) {
+          found.outerActions.forEach(_ => {
+            if (_.actionType === 'save') {
+              _.props.loading = false
+            }
+          })
+        }
         if (statusCode === 'OK') {
           this.$Notice.success({
             title: 'Added successfully',
@@ -725,6 +744,14 @@ export default {
         }
       }
       if (editAry.length > 0) {
+        const found = this.tabList.find(_ => _.id === this.currentTab)
+        if (found) {
+          found.outerActions.forEach(_ => {
+            if (_.actionType === 'save') {
+              _.props.loading = true
+            }
+          })
+        }
         editAry.forEach(_ => {
           delete _.isRowEditable
           delete _.weTableForm
@@ -737,6 +764,13 @@ export default {
           updateData: editAry
         }
         const { statusCode, message } = await updateCiDatas(payload)
+        if (found) {
+          found.outerActions.forEach(_ => {
+            if (_.actionType === 'save') {
+              _.props.loading = false
+            }
+          })
+        }
         if (statusCode === 'OK') {
           this.$Notice.success({
             title: 'Updated successfully',
@@ -748,10 +782,25 @@ export default {
       }
     },
     async exportHandler () {
+      const found = this.tabList.find(_ => _.id === this.currentTab)
+      if (found) {
+        found.outerActions.forEach(_ => {
+          if (_.actionType === 'export') {
+            _.props.loading = true
+          }
+        })
+      }
       const { statusCode, data } = await queryCiData({
         id: this.currentTab,
         queryObject: {}
       })
+      if (found) {
+        found.outerActions.forEach(_ => {
+          if (_.actionType === 'export') {
+            _.props.loading = false
+          }
+        })
+      }
       if (statusCode === 'OK') {
         this.$refs[this.tableRef][0].export({
           filename: this.ciTypesName[this.currentTab],
@@ -833,26 +882,10 @@ export default {
         })
         this.tabList.forEach(ci => {
           if (ci.id === this.currentTab) {
-            ci.tableColumns = this.getSelectOptions(columns)
+            ci.tableColumns = columns
           }
         })
       }
-    },
-    getSelectOptions (columns) {
-      columns.forEach(async _ => {
-        if (_.inputType === 'select' || _.inputType === 'multiSelect') {
-          const { data } = await getEnumCodesByCategoryId(0, _.referenceId)
-          _['options'] = data
-            .filter(j => j.status === 'active')
-            .map(i => {
-              return {
-                label: i.value,
-                value: i.codeId
-              }
-            })
-        }
-      })
-      return columns
     }
   },
   mounted () {
