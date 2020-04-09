@@ -47,7 +47,6 @@ public class ConfirmAction implements Action {
     @Override
     public Map<String, Object> perform(EntityManager entityManager, int ciTypeId, String guid, AdmStateTransition transition, Map<String, Object> ciData, DynamicEntityHolder ciHolder, Date date) {
         SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        dateFmt.setTimeZone(TimeZone.getDefault());
         if (ciHolder == null) {
             ciHolder = ciService.getCiHolder(ciTypeId, guid);
         }
